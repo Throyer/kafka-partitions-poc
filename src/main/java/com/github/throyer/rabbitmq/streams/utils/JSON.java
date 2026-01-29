@@ -11,6 +11,18 @@ public class JSON {
     .builder()
     .build();
 
+  public static <T> byte[] serialize(final T object) {
+    return MAPPER.writeValueAsBytes(object);
+  }
+
+  public static <T> T deSerialize(byte[] value, Class<T> type) {
+    try {
+      return MAPPER.readValue(value, type);
+    } catch (JacksonException exception) {
+      return null;
+    }
+  }
+
   public static <T> String stringify(final T object) {
     try {
       return MAPPER.writer().writeValueAsString(object);
