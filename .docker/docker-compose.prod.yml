@@ -9,13 +9,27 @@ services:
       dockerfile: .docker/Dockerfile.prod
     environment:
       TZ: "${TIMEZONE}"
-      RABBITMQ_STREAM_PARTITIONS: 6
+      RABBITMQ_STREAM_PARTITIONS: 3
       SERVER_PORT: 8080
     env_file:
       - ".env"
     links:
       - database
       - rabbitmq
+    entrypoint: [
+      "dockerize",
+      "-wait",
+      "tcp://rabbitmq:$RABBITMQ_PORT",
+      "-timeout",
+      "30s",
+      "-wait",
+      "tcp://database:$DB_PORT",
+      "-timeout",
+      "60s",
+      "java",
+      "-jar",
+      "api.jar"
+    ]
     deploy:
       resources:
         limits:
@@ -54,7 +68,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.45"
+          cpus: "0.60"
           memory: "270MB"
 
   rabbitmq:
@@ -75,7 +89,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.45"
+          cpus: "0.55"
           memory: "270MB"
 
   nginx:
@@ -89,11 +103,6 @@ services:
       - api02
       - api03
       - api04
-    depends_on:
-      - api01
-      - api02
-      - api03
-      - api04
     ports:
       - "8080:80"
     command: [
@@ -101,19 +110,19 @@ services:
       "-wait",
       "http://api01:8080",
       "-timeout",
-      "30s",
+      "60s",
       "-wait",
       "http://api02:8080",
       "-timeout",
-      "30s",
+      "60s",
       "-wait",
       "http://api03:8080",
       "-timeout",
-      "30s",
+      "60s",
       "-wait",
       "http://api04:8080",
       "-timeout",
-      "30s",
+      "60s",
       "nginx",
       "-g",
       "daemon off;"
