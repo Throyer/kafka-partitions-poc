@@ -51,6 +51,11 @@ services:
     volumes:
       - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ~/.volumes/throyer/pocs/rabbitmq-streams/mongodb:/data/db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.45"
+          memory: "270MB"
 
   rabbitmq:
     image: rabbitmq:3.13.7-management
@@ -67,7 +72,11 @@ services:
       - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
       - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
       - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
-    tty: true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.45"
+          memory: "270MB"
 
   nginx:
     build:
