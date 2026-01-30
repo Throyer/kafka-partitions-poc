@@ -41,7 +41,7 @@ public class RabbitMQStreamConfig {
       return new StreamAdmin(environment, creator -> {
           log.info("Criando Super Stream: {} com {} partições", streamName, partitions);
           creator.stream(streamName)
-              .maxAge(Duration.ofMinutes(5))
+              .maxAge(Duration.ofSeconds(5))
               .maxSegmentSizeBytes(ByteCapacity.from("100MB"))
               .superStream()
                   .partitions(partitions)

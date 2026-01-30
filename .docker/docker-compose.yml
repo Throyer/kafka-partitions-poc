@@ -12,6 +12,7 @@ services:
       dockerfile: .docker/Dockerfile
     environment:
       TZ: "${TIMEZONE}"
+      SERVER_SERVLET_CONTEXT_PATH: "/api"
     env_file:
       - ".env"
     volumes:

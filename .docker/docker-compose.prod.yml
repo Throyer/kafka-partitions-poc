@@ -1,0 +1,123 @@
+services:
+  api01: &api
+    container_name: api-01
+    hostname: api01
+    expose:
+      - 8080
+    build:
+      context: ../
+      dockerfile: .docker/Dockerfile.prod
+    environment:
+      TZ: "${TIMEZONE}"
+      RABBITMQ_STREAM_PARTITIONS: 6
+      SERVER_PORT: 8080
+    env_file:
+      - ".env"
+    links:
+      - database
+      - rabbitmq
+    deploy:
+      resources:
+        limits:
+          cpus: "0.55"
+          memory: "200MB"
+    
+  api02:
+    <<: *api
+    hostname: api02
+    container_name: api-02
+
+  api03:
+    <<: *api
+    hostname: api03
+    container_name: api-03
+
+  api04:
+    <<: *api
+    hostname: api04
+    container_name: api-04
+    
+  database:
+    container_name: database
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:27017"
+    environment:
+      TZ: "${TIMEZONE}"
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_DATABASE: root_database
+    volumes:
+      - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ~/.volumes/throyer/pocs/rabbitmq-streams/mongodb:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3.13.7-management
+    restart: unless-stopped
+    container_name: rabbitmq
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_STREAM_PORT}:5552"
+      - "${RABBITMQ_CLIENT_WEB_PORT}:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+    tty: true
+
+  nginx:
+    build:
+      context: ../
+      dockerfile: .docker/nginx/Dockerfile
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    links:
+      - api01
+      - api02
+      - api03
+      - api04
+    depends_on:
+      - api01
+      - api02
+      - api03
+      - api04
+    ports:
+      - "8080:80"
+    command: [
+      "dockerize",
+      "-wait",
+      "http://api01:8080",
+      "-timeout",
+      "30s",
+      "-wait",
+      "http://api02:8080",
+      "-timeout",
+      "30s",
+      "-wait",
+      "http://api03:8080",
+      "-timeout",
+      "30s",
+      "-wait",
+      "http://api04:8080",
+      "-timeout",
+      "30s",
+      "nginx",
+      "-g",
+      "daemon off;"
+    ]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: "10MB"
+
+volumes:
+  maven:
+networks:
+  default:
+    driver: bridge
+    name: rabbitmq-super-streams-poc
