@@ -1,6 +1,7 @@
 package com.github.throyer.rabbitmq.producer.controllers;
 
 import com.github.throyer.rabbitmq.producer.services.AfterSaleUpdateProducer;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ public class EventController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void publishEvent(@RequestBody Event event) {
+  public void publishEvent(@RequestBody @Valid Event event) {
     producer.publish(event);
   }
 }

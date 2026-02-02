@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import com.github.throyer.rabbitmq.consumer.models.Event;

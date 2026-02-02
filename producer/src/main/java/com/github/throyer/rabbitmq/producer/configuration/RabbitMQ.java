@@ -1,7 +1,7 @@
 package com.github.throyer.rabbitmq.producer.configuration;
 
-import com.github.throyer.rabbitmq.producer.utils.JSON;
-import lombok.extern.slf4j.Slf4j;
+import static com.github.throyer.rabbitmq.producer.utils.JSON.MAPPER;
+
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -9,7 +9,7 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.github.throyer.rabbitmq.producer.utils.JSON.MAPPER;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration

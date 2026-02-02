@@ -1,18 +1,18 @@
 package com.github.throyer.rabbitmq.consumer.configuration;
 
-import com.github.throyer.rabbitmq.consumer.utils.JSON;
-import lombok.extern.slf4j.Slf4j;
+import static com.github.throyer.rabbitmq.consumer.utils.JSON.MAPPER;
+import static org.springframework.amqp.core.AcknowledgeMode.MANUAL;
+
+import java.text.MessageFormat;
+import java.util.Random;
+
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.text.MessageFormat;
-
-import static com.github.throyer.rabbitmq.consumer.utils.JSON.MAPPER;
-import static org.springframework.amqp.core.AcknowledgeMode.MANUAL;
-import static org.springframework.amqp.core.QueueBuilder.durable;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
@@ -30,7 +30,7 @@ public class RabbitMQ {
   }
 
   @Bean("container")
-  public SimpleRabbitListenerContainerFactory factory(ConnectionFactory connection) {
+  public SimpleRabbitListenerContainerFactory factory(ConnectionFactory connection) throws InterruptedException {
     var container = new SimpleRabbitListenerContainerFactory();
     container.setMessageConverter(new Jackson2JsonMessageConverter(MAPPER));
     container.setConnectionFactory(connection);
@@ -38,6 +38,9 @@ public class RabbitMQ {
     container.setConcurrentConsumers(1);
     container.setDefaultRequeueRejected(false);
     container.setAcknowledgeMode(MANUAL);
+    
+    Thread.sleep(new Random().nextInt(10000) + 5000);
+    
     return container;
   }
 }
