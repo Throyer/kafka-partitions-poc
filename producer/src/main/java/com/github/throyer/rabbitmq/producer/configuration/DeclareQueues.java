@@ -17,27 +17,29 @@ import static org.springframework.amqp.core.QueueBuilder.durable;
 @Component
 @AllArgsConstructor
 public class DeclareQueues implements CommandLineRunner {
-  public static final String QUEUE_NAME_PATTERN = "after-sale.update-{0}";
+  private static final String QUEUE_NAME_PATTERN = "queue.after-sale.update-{0}";
   public static final String PARTITION_NAME_PATTERN = "after-sale.partition-{0}";
   
   public static final String EXCHANGE_NAME = "after-sale.update";
   public static final int TOTAL_PARTITIONS = 32;
   
   private final RabbitAdmin admin;
+  private final EventsQueue eventsQueue;
   
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
     Exchange exchange = directExchange(EXCHANGE_NAME)
       .durable(true)
       .build();
 
     admin.declareExchange(exchange);
     
-    for (int index = 0; index < TOTAL_PARTITIONS; index++) {
+    for (int index = 0; index < eventsQueue.partitions(); index++) {
       var name = MessageFormat.format(QUEUE_NAME_PATTERN, index);
       var queue = durable(name)
         .singleActiveConsumer()
         .build();
+      
       admin.declareQueue(queue);
 
       var partition = MessageFormat.format(PARTITION_NAME_PATTERN, index);

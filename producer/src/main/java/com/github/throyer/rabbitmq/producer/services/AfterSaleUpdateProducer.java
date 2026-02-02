@@ -1,5 +1,6 @@
 package com.github.throyer.rabbitmq.producer.services;
 
+import com.github.throyer.rabbitmq.producer.configuration.EventsQueue;
 import com.github.throyer.rabbitmq.producer.models.Event;
 import com.github.throyer.rabbitmq.producer.utils.JSON;
 import lombok.AllArgsConstructor;
@@ -15,11 +16,12 @@ import static com.github.throyer.rabbitmq.producer.configuration.DeclareQueues.p
 @AllArgsConstructor
 public class AfterSaleUpdateProducer {
   private final RabbitTemplate rabbitmq;
+  private final EventsQueue eventsQueue;
   
   public void publish(Event event) {    
     try {
       var partition = partition(event);
-      rabbitmq.convertAndSend(EXCHANGE_NAME, partition(event), event);
+      rabbitmq.convertAndSend(EXCHANGE_NAME, eventsQueue.partition(event), event);
 
       log.debug("publish. exchange: {}, partition: {}, event: {}", EXCHANGE_NAME, partition, JSON.stringify(event));
     } catch (Exception exception) {

@@ -2,11 +2,12 @@ x-producer-service: &producer-service
   build:
     context: ../producer
     dockerfile: ../.docker/Dockerfile.prod
-  ports:
-    - "8080:8080"
+  expose:
+    - 8080
   environment:
     TZ: "${TIMEZONE}"
     SERVER_PORT: 8080
+    EVENTS_QUEUE_TOTAL_PARTITIONS: 12
   env_file:
     - ".env"
   links:
@@ -14,8 +15,8 @@ x-producer-service: &producer-service
   deploy:
     resources:
       limits:
-        cpus: "0.30"
-        memory: "100MB"
+        cpus: "0.50"
+        memory: "300MB"
   entrypoint: [
     "java",
     "-jar",
@@ -29,6 +30,8 @@ x-consumer-service: &consumer-service
   environment:
     TZ: "${TIMEZONE}"
     SERVER_PORT: 8080
+    EVENTS_QUEUE_TOTAL_PARTITIONS: 12
+    EVENTS_QUEUE_EXPECTED_REPLICAS: 4
   env_file:
     - ".env"
   links:
@@ -50,6 +53,21 @@ services:
     <<: *producer-service
     container_name: producer-01
     hostname: producer01
+    
+  producer_02:
+    <<: *producer-service
+    container_name: producer-02
+    hostname: producer02
+    
+  producer_03:
+    <<: *producer-service
+    container_name: producer-03
+    hostname: producer03
+    
+  producer_04:
+    <<: *producer-service
+    container_name: producer-04
+    hostname: producer04
   
   consumer_01:
     <<: *consumer-service
@@ -70,6 +88,28 @@ services:
     <<: *consumer-service
     container_name: consumer-04
     hostname: consumer04
+    
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    links:
+      - producer_01
+      - producer_02
+      - producer_03
+      - producer_04 
+    depends_on:
+      - producer_01
+      - producer_02
+      - producer_03
+      - producer_04
+    ports:
+      - "8080:80"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: "10MB"
     
   database:
     container_name: database
