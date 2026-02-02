@@ -1,4 +1,4 @@
-package com.github.throyer.rabbitmq.streams.utils;
+package com.github.throyer.rabbitmq.producer.utils;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
-package com.github.throyer.rabbitmq.streams.controllers;
+package com.github.throyer.rabbitmq.producer.controllers;
 
-import org.springframework.cloud.stream.function.StreamBridge;
+import com.github.throyer.rabbitmq.producer.services.AfterSaleUpdateProducer;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.throyer.rabbitmq.streams.models.Event;
+import com.github.throyer.rabbitmq.producer.models.Event;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventController {
 
-  private final StreamBridge bridge;
+  private final AfterSaleUpdateProducer producer;
 
   @PostMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void publishEvent(@RequestBody Event event) {
-    bridge.send("pedidos-out-0", event);
+    producer.publish(event);
   }
 }

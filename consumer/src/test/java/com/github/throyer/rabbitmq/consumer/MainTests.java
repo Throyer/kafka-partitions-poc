@@ -1,10 +1,10 @@
-package com.github.throyer.rabbitmq.streams;
+package com.github.throyer.rabbitmq.consumer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RabbitmqStreamsApplicationTests {
+class MainTests {
 	@Test
 	void contextLoads() { }
 }

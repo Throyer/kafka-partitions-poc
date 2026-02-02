@@ -33,3 +33,4 @@ build/
 .vscode/
 .maven/.m2
 .docker/.env
+.maven/settings.xml

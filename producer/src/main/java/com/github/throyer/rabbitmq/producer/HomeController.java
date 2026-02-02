@@ -1,4 +1,4 @@
-package com.github.throyer.rabbitmq.streams;
+package com.github.throyer.rabbitmq.producer;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package com.github.throyer.rabbitmq.streams.models;
+package com.github.throyer.rabbitmq.consumer.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event {
-  private String id;
+  private String orderNumber;
   private String code;
 }
