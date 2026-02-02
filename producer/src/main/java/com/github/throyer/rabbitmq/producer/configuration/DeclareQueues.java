@@ -36,6 +36,7 @@ public class DeclareQueues implements CommandLineRunner {
     for (int index = 0; index < TOTAL_PARTITIONS; index++) {
       var name = MessageFormat.format(QUEUE_NAME_PATTERN, index);
       var queue = durable(name)
+        .singleActiveConsumer()
         .build();
       admin.declareQueue(queue);
 

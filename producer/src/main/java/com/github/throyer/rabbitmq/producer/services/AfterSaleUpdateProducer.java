@@ -1,6 +1,7 @@
 package com.github.throyer.rabbitmq.producer.services;
 
 import com.github.throyer.rabbitmq.producer.models.Event;
+import com.github.throyer.rabbitmq.producer.utils.JSON;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -17,7 +18,10 @@ public class AfterSaleUpdateProducer {
   
   public void publish(Event event) {    
     try {
+      var partition = partition(event);
       rabbitmq.convertAndSend(EXCHANGE_NAME, partition(event), event);
+
+      log.debug("publish. exchange: {}, partition: {}, event: {}", EXCHANGE_NAME, partition, JSON.stringify(event));
     } catch (Exception exception) {
       
       log.error("falha ao publicar mensagem. error: {}", exception.getMessage());

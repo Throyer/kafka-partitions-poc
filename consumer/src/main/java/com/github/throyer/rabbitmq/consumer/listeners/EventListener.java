@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import com.github.throyer.rabbitmq.consumer.models.Event;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @AllArgsConstructor
 public class EventListener {
-  @RabbitListener(queues = "#{@queues}")
+  @RabbitListener(queues = "#{@queues}", containerFactory = "container")
   public void processar(Event event, Channel channel, @Header(DELIVERY_TAG) long tag) throws IOException {
     try {
       log.debug("processando pedido: {}", JSON.stringify(event));
