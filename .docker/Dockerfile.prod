@@ -1,4 +1,4 @@
-FROM maven:3.9.9-eclipse-temurin-17-alpine AS builder
+FROM maven:3.9.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ COPY ./src ./src
 
 RUN --mount=type=cache,target=/root/.m2 mvn package -DskipTests
 
-FROM eclipse-temurin:17-alpine
+FROM eclipse-temurin:17-jdk-noble
 
 WORKDIR /app
 
@@ -16,11 +16,10 @@ ENV DOCKERIZE_VERSION=v0.9.9
 
 COPY --from=BUILDER /app/target/*.jar ./api.jar
 
-RUN apk add --no-cache openssl
-
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+RUN apt-get update \
+    && apt-get install -y wget \
+    && wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
+    && apt-get autoremove -yqq --purge wget && rm -rf /var/lib/apt/lists/*
 
 EXPOSE ${SERVER_PORT}
 

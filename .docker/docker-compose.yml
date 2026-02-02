@@ -12,7 +12,7 @@ services:
       dockerfile: .docker/Dockerfile
     environment:
       TZ: "${TIMEZONE}"
-      SERVER_SERVLET_CONTEXT_PATH: "/api"
+      RABBITMQ_STREAM_PARTITIONS: 4
     env_file:
       - ".env"
     volumes:
@@ -20,6 +20,8 @@ services:
       - maven:/root/.m2/repository
     links:
       - database
+      - rabbitmq
+    depends_on:
       - rabbitmq
     
   database:
@@ -52,7 +54,6 @@ services:
       - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
       - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
       - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
-    tty: true
 
 volumes:
   maven:

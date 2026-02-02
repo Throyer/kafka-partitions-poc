@@ -17,15 +17,15 @@ services:
       - database
       - rabbitmq
     entrypoint: [
-      "dockerize",
-      "-wait",
-      "tcp://rabbitmq:$RABBITMQ_PORT",
-      "-timeout",
-      "30s",
-      "-wait",
-      "tcp://database:$DB_PORT",
-      "-timeout",
-      "60s",
+      # "dockerize",
+      # "-wait",
+      # "tcp://rabbitmq:$RABBITMQ_PORT",
+      # "-timeout",
+      # "30s",
+      # "-wait",
+      # "tcp://database:$DB_PORT",
+      # "-timeout",
+      # "60s",
       "java",
       "-jar",
       "api.jar"
