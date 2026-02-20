@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.github.throyer.kafka.consumer.models.Event;
 import com.github.throyer.kafka.consumer.services.ProcessAfterSaleService;
-import com.github.throyer.kafka.consumer.utils.JSON;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

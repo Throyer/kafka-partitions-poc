@@ -22,7 +22,7 @@ public class KafkaProducerConfiguration {
   }
 
   @Bean
-  NewTopic topic(KafkaSettings settings) {
+  NewTopic topic(KafkaSettings settings) {    
     return TopicBuilder.name(settings.getTopic())
       .partitions(settings.getPartitions())
       .build();
