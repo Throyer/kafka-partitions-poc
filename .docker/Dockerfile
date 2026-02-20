@@ -2,8 +2,6 @@ FROM maven:3.9.9-eclipse-temurin-17
 
 WORKDIR /app
 
-COPY .maven/settings.xml /root/.m2/settings.xml
-
 ENV DOCKERIZE_VERSION=v0.9.9
 
 RUN apt-get update && apt-get install -y wget

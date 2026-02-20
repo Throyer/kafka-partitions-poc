@@ -6,4 +6,5 @@
 #   -wait tcp://database:$DB_PORT \
 #   -timeout 20s \
   mvn spring-boot:run \
-  -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,address=*:$DEBUG_PORT_CONSUMER,suspend=n"
+  -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,address=*:$DEBUG_PORT_CONSUMER,suspend=n" \
+  -Dmaven.repo.local=../.maven/.m2

@@ -34,3 +34,4 @@ build/
 .maven/.m2
 .docker/.env
 .maven/settings.xml
+*.DS_Store

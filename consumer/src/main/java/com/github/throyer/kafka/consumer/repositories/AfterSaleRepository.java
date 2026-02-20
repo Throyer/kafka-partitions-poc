@@ -7,6 +7,6 @@ import com.github.throyer.kafka.consumer.models.AfterSale;
 
 import java.util.Optional;
 
-public interface EventRepository extends MongoRepository<AfterSale, String> {
+public interface AfterSaleRepository extends MongoRepository<AfterSale, String> {
   Optional<AfterSale> findByOrderNumber(@Param("orderNumber") String orderNumber);  
 }

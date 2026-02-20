@@ -16,7 +16,7 @@ services:
       - ".env"
     volumes:
       - ../producer:/app
-      - maven:/root/.m2/repository
+      - ../.maven/.m2:/.maven/.m2
     links:
       - kafka
     depends_on:
@@ -39,7 +39,7 @@ services:
       - ".env"
     volumes:
       - ../consumer:/app
-      - maven:/root/.m2/repository
+      - ../.maven/.m2:/.maven/.m2
     links:
       - database
       - kafka

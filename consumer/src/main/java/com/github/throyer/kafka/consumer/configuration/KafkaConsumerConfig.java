@@ -25,11 +25,10 @@ public class KafkaConsumerConfig {
   @Value("${spring.kafka.bootstrap-servers}")
   private String bootstrapServers;
 
-  @Bean
+  @Bean("kafka-consumer-factory")
   ConsumerFactory<String, Event> consumerFactory() {
     var props = new HashMap<String, Object>();
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-    props.put(ConsumerConfig.GROUP_ID_CONFIG, "after-sale-processor");
     props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
     props.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
     
@@ -40,7 +39,7 @@ public class KafkaConsumerConfig {
     );
   }
 
-  @Bean
+  @Bean("kafka-listener-container")
   ConcurrentKafkaListenerContainerFactory<String, Event> kafkaListenerContainerFactory() {
     var factory = new ConcurrentKafkaListenerContainerFactory<String, Event>();
     factory.setConsumerFactory(consumerFactory());    
