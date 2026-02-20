@@ -1,10 +1,7 @@
 package com.github.throyer.kafka.consumer.configuration;
 
-import java.util.HashMap;
-
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -20,29 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @EnableKafka
 @Configuration
-public class KafkaConsumerConfig {
-
-  @Value("${spring.kafka.bootstrap-servers}")
-  private String bootstrapServers;
-
+public class KafkaConsumerConfiguration {
   @Bean("kafka-consumer-factory")
-  ConsumerFactory<String, Event> consumerFactory() {
-    var props = new HashMap<String, Object>();
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-    props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-    props.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
-    
+  ConsumerFactory<String, Event> consumer(KafkaSettings settings) {
     return new DefaultKafkaConsumerFactory<>(
-      props,
+      settings.map(),
       new StringDeserializer(),
       new JsonDeserializer<>(Event.class)
     );
   }
 
   @Bean("kafka-listener-container")
-  ConcurrentKafkaListenerContainerFactory<String, Event> kafkaListenerContainerFactory() {
+  ConcurrentKafkaListenerContainerFactory<String, Event> container(
+    @Qualifier("kafka-consumer-factory") ConsumerFactory<String, Event> consumer
+  ) {
     var factory = new ConcurrentKafkaListenerContainerFactory<String, Event>();
-    factory.setConsumerFactory(consumerFactory());    
+    factory.setConsumerFactory(consumer);    
     return factory;
   }
 }
