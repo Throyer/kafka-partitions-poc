@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PedidosConsumer {
 
-    private static final Logger log = LoggerFactory.getLogger(PedidosConsumer.class);
+  private static final Logger log = LoggerFactory.getLogger(PedidosConsumer.class);
 
-    @RabbitListener(queues = RabbitMqConfig.PEDIDOS)
-    public void consume(String message) {
-        log.info("Mensagem recebida na fila pedidos: {}", message);
-    }
+  @RabbitListener(queues = RabbitMqConfig.PEDIDOS)
+  public void consume(String message) {
+    log.info("Mensagem recebida na fila pedidos: {}", message);
+  }
 }
