@@ -1,0 +1,13 @@
+{
+  "editor.inlineSuggest.enabled": false,
+  "java.configuration.maven.userSettings": "${workspaceFolder}/.maven/settings.xml",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "editor.inlayHints.enabled": "off",
+  "cSpell.words": [
+    "github",
+    "isometricgame",
+    "throyer",
+    "verygeneric",
+    "rabbitmq"
+  ],
+}
