@@ -1,9 +1,12 @@
 {
   "editor.inlineSuggest.enabled": false,
   "java.configuration.maven.userSettings": "${workspaceFolder}/.maven/settings.xml",
+  "java.format.settings.url": "${workspaceFolder}/.vscode/java-formatter.xml",
   "java.configuration.updateBuildConfiguration": "automatic",
+  "java.format.settings.profile": "poc",
   "editor.inlayHints.enabled": "off",
   "cSpell.words": [
+    "Amqp",
     "declarables",
     "github",
     "isometricgame",
@@ -12,4 +15,9 @@
     "verygeneric"
   ],
   "java.compile.nullAnalysis.mode": "disabled",
+  "[java]": {
+    "editor.tabSize": 2,
+    "editor.indentSize": 2,
+    "editor.defaultFormatter": "redhat.java"
+  },
 }

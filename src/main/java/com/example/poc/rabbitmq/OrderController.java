@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OrderController {
 
-    private final OrderPublisher orderPublisher;
+  private final OrderPublisher orderPublisher;
 
-    public OrderController(OrderPublisher orderPublisher) {
-        this.orderPublisher = orderPublisher;
-    }
+  public OrderController(OrderPublisher orderPublisher) {
+    this.orderPublisher = orderPublisher;
+  }
 
-    @PostMapping("/orders")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void publish(@RequestBody Order order) {
-        orderPublisher.publish(order);
-    }
+  @PostMapping("/orders")
+  @ResponseStatus(HttpStatus.ACCEPTED)
+  public void publish(@RequestBody Order order) {
+    orderPublisher.publish(order);
+  }
 }
