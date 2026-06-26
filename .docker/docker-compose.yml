@@ -5,6 +5,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
     environment:
       RABBITMQ_DEFAULT_USER: root
       RABBITMQ_DEFAULT_PASS: root
@@ -19,7 +21,7 @@ services:
     container_name: backend
     working_dir: /app
     volumes:
-      - .:/app
+      - ..:/app
       - maven-cache:/root/.m2
     ports:
       - "8080:8080"
@@ -29,10 +31,7 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    # command: "sleep infinity"
-    command: >
-      mvn spring-boot:run
-      -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,address=*:5005,suspend=n"
+    command: ["./entrypoint.sh"]
 
 volumes:
   maven-cache:
