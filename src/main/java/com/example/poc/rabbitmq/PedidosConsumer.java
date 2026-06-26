@@ -1,17 +1,15 @@
 package com.example.poc.rabbitmq;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class PedidosConsumer {
-
-  private static final Logger log = LoggerFactory.getLogger(PedidosConsumer.class);
-
-  @RabbitListener(queues = RabbitMqConfig.PEDIDOS)
-  public void consume(String message) {
-    log.info("Mensagem recebida na fila pedidos: {}", message);
+  @RabbitListener(queues = "#{T(com.example.poc.rabbitmq.RabbitMqConfig).QUEUE_NAMES}")
+  public void consume(Order order) {
+    log.info("Pedido recebido: orderNumber={}, user={}", order.orderNumber(), order.user());
   }
 }

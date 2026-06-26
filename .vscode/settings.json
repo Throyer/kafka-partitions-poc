@@ -4,10 +4,11 @@
   "java.configuration.updateBuildConfiguration": "automatic",
   "editor.inlayHints.enabled": "off",
   "cSpell.words": [
+    "declarables",
     "github",
     "isometricgame",
+    "rabbitmq",
     "throyer",
-    "verygeneric",
-    "rabbitmq"
+    "verygeneric"
   ],
 }
