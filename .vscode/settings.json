@@ -11,4 +11,5 @@
     "throyer",
     "verygeneric"
   ],
+  "java.compile.nullAnalysis.mode": "disabled",
 }
