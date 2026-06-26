@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class OrderController {
-
   private final OrderPublisher orderPublisher;
 
   public OrderController(OrderPublisher orderPublisher) {
