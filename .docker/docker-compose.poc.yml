@@ -1,15 +1,18 @@
 x-app-base: &app-base
-  image: maven:3.9.9-eclipse-temurin-17
-  working_dir: /app
-  volumes:
-    - ..:/app
-    - maven-cache:/root/.m2
+  build:
+    context: ..
+    dockerfile: Dockerfile.poc
+  image: poc-aftersale-rabbitmq:poc
+  restart: unless-stopped
   environment:
     SPRING_RABBITMQ_HOST: rabbitmq
+    DB_URI: mongodb://root:root@database:27017/after_sale
+    CORPORATE_CUSTOMERS_HOST: http://external-domains-mock:3001
+    CORPORATE_ORDERS_HOST: http://external-domains-mock:3001
+    CORPORATE_PAYMENTS_HOST: http://external-domains-mock:3001
   depends_on:
     rabbitmq:
       condition: service_healthy
-  command: ["./entrypoint.sh"]
 
 services:
   database:
@@ -76,22 +79,16 @@ services:
     <<: *app-base
     container_name: backend-1
     hostname: backend-1
-    ports:
-      - "5005:5005"
 
   app-2:
     <<: *app-base
     container_name: backend-2
     hostname: backend-2
-    ports:
-      - "5006:5005"
 
   app-3:
     <<: *app-base
     container_name: backend-3
     hostname: backend-3
-    ports:
-      - "5007:5005"
 
   nginx:
     image: nginx:1.27-alpine
@@ -106,6 +103,3 @@ services:
       - app-1
       - app-2
       - app-3
-
-volumes:
-  maven-cache:
