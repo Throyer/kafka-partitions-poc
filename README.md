@@ -11,7 +11,6 @@ Crie o arquivo de ambiente antes de subir os composes:
 
 ```bash
 cat > .docker/.env <<'EOF'
-DB_PORT=27017
 TIMEZONE=America/Sao_Paulo
 MOCK_PORT=3001
 EOF

@@ -22,7 +22,7 @@ services:
     image: mongo:7
     restart: unless-stopped
     ports:
-      - "${DB_PORT}:27017"
+      - "27017:27017"
     environment:
       TZ: "${TIMEZONE}"
       MONGO_INITDB_ROOT_USERNAME: root
