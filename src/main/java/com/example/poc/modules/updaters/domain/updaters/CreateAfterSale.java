@@ -15,7 +15,7 @@ public class CreateAfterSale implements AfterSaleUpdater {
   
   @Override
   public boolean eligible(EventParameters parameters) {
-    return parameters.hasStatusCode("CRIADO");
+    return parameters.hasStatusCode("1011");
   }
 
   @Override

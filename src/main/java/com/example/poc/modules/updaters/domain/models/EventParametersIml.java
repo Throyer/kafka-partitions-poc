@@ -32,6 +32,6 @@ public class EventParametersIml implements EventParameters {
     }
 
     return Stream.of(candidates)
-      .anyMatch(code -> event.getStatusCode().equals(code));
+      .anyMatch(event::is);
   }
 }

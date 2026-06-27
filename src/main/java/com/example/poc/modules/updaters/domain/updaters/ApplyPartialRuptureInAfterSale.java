@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplyPartialRuptureInAfterSale implements AfterSaleUpdater {  
   @Override
   public boolean eligible(EventParameters parameters) {
-    return parameters.hasStatusCode("RUPTURA_PARCIAL");
+    return parameters.hasStatusCode("145");
   }
 
   @Override
