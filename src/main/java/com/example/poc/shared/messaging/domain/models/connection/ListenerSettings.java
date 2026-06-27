@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.connection;
 
 import static org.springframework.amqp.core.AcknowledgeMode.MANUAL;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;

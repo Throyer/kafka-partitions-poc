@@ -1,6 +1,7 @@
 package com.example.poc.shared.messaging.domain.annotations;
 
-import com.example.poc.shared.messaging.domain.models.Connection;
+import com.example.poc.shared.messaging.domain.models.connection.Connection;
+import com.example.poc.shared.messaging.domain.models.QueueAlias;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -12,5 +13,5 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface RabbitConnection {
   Connection connection();
-  String queue();
+  QueueAlias queue();
 }

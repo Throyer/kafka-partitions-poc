@@ -2,8 +2,8 @@ package com.example.poc.modules.triggers.messaging.consumers;
 
 import com.example.poc.modules.triggers.domain.models.ExternalTriggerEvent;
 import com.example.poc.modules.triggers.services.ProcessExternalEventService;
-import com.example.poc.shared.messaging.domain.models.Message;
-import com.example.poc.shared.messaging.domain.models.RetryListener;
+import com.example.poc.shared.messaging.domain.models.message.Message;
+import com.example.poc.shared.messaging.domain.models.message.RetryListener;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

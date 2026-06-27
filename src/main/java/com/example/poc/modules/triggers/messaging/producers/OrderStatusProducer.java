@@ -1,19 +1,18 @@
 package com.example.poc.modules.triggers.messaging.producers;
 
-import com.example.poc.modules.triggers.domain.dtos.OrderDTO;
-import com.example.poc.shared.messaging.services.QueueManager;
-import lombok.AllArgsConstructor;
+import static com.example.poc.shared.messaging.domain.models.QueueAlias.OMS_ORDER_STATUS;
 import org.springframework.stereotype.Service;
-
-import static com.example.poc.shared.messaging.domain.queues.OrderStatusQueue.ORDER_STATUS_ALIAS;
+import com.example.poc.modules.triggers.domain.dtos.OrderDTO;
+import com.example.poc.shared.messaging.services.PublisherManager;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class OrderStatusProducer {
-  private final QueueManager manager;
+  private final PublisherManager manager;
 
   public void publish(OrderDTO order) {
-    manager.getByAlias(ORDER_STATUS_ALIAS)
-      .ifPresent(queue -> queue.publish(order));
+    manager.getByAlias(OMS_ORDER_STATUS)
+      .publish(order);
   }
 }

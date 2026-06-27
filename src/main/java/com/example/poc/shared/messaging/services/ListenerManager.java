@@ -1,7 +1,7 @@
 package com.example.poc.shared.messaging.services;
 
-import com.example.poc.shared.messaging.domain.models.RetryListener;
-import com.example.poc.shared.messaging.domain.models.RetryManager;
+import com.example.poc.shared.messaging.domain.models.message.RetryListener;
+import com.example.poc.shared.messaging.domain.models.message.RetryManager;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import static java.lang.String.format;
 public class ListenerManager {
   private final List<RetryListener<?>> listeners;
   private final ConnectionManager connections;
-  private final QueueManager queues;
+  private final QueueSettingsManager settingsManager;
   private final Validator validator;
   private final GenericApplicationContext context;
   
@@ -37,7 +37,7 @@ public class ListenerManager {
       try {
         var connection = getConnection(listener);
 
-        var queue = queues
+        var queueSettings = settingsManager
           .getByAlias(queueAlias)
           .orElseThrow(() -> new RuntimeException(format("não foi possível localizar a queue: %s", queueAlias)));
         
@@ -45,16 +45,16 @@ public class ListenerManager {
           .getFactoryByConnection(connection)
           .orElseThrow(() -> new RuntimeException(format("não foi possível localizar a connection factory de: %s", connection)));
                 
-        var settings = connections.getSettingsByConnection(connection)
+        var connectionSettings = connections.getSettingsByConnection(connection)
           .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações de: %s", connection)));
         
-        var container = settings
+        var container = connectionSettings
           .getListenerSettings()
           .getCustomManualContainer(factory);
         
-        queue.setQueue(container);
+        queueSettings.setQueue(container);
         
-        container.setMessageListener(new RetryManager<>(queue, listener, validator));
+        container.setMessageListener(new RetryManager<>(queueSettings, listener, validator));
 
         var name = format("%s-rabbitmq-listener-%s", connection.name().toLowerCase(), queueAlias);
 

@@ -1,6 +1,6 @@
 package com.example.poc.configuration.messaging;
 
-import static com.example.poc.shared.messaging.domain.models.Connection.TRACKING;
+import static com.example.poc.shared.messaging.domain.models.connection.Connection.TRACKING;
 import static com.example.poc.shared.messaging.domain.utils.RabbitUtils.createTemplate;
 import static java.lang.String.format;
 import java.security.KeyManagementException;

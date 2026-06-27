@@ -9,13 +9,13 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import com.example.poc.shared.messaging.domain.models.ChannelManager;
-import com.example.poc.shared.messaging.domain.models.Error;
-import com.example.poc.shared.messaging.domain.models.Fail;
-import com.example.poc.shared.messaging.domain.models.FailImpl;
-import com.example.poc.shared.messaging.domain.models.Message;
-import com.example.poc.shared.messaging.domain.models.MessageImpl;
-import com.example.poc.shared.messaging.domain.models.RetryListener;
+import com.example.poc.shared.messaging.domain.models.message.ChannelManager;
+import com.example.poc.shared.messaging.domain.models.message.Error;
+import com.example.poc.shared.messaging.domain.models.message.Fail;
+import com.example.poc.shared.messaging.domain.models.message.FailImpl;
+import com.example.poc.shared.messaging.domain.models.message.Message;
+import com.example.poc.shared.messaging.domain.models.message.MessageImpl;
+import com.example.poc.shared.messaging.domain.models.message.RetryListener;
 
 public class RabbitUtils {
   public static RabbitAdmin admin(ConnectionFactory factory) {

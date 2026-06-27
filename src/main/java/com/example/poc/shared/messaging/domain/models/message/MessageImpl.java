@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.message;
 
 import org.springframework.amqp.core.MessageProperties;
 import lombok.AllArgsConstructor;

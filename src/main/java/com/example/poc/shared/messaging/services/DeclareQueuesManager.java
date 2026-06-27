@@ -2,19 +2,18 @@ package com.example.poc.shared.messaging.services;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.stereotype.Service;
-import com.example.poc.shared.messaging.domain.models.Connection;
-import com.example.poc.shared.messaging.domain.models.Queue;
+import com.example.poc.shared.messaging.domain.models.connection.Connection;
+import com.example.poc.shared.messaging.domain.models.declare.QueueDeclarator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @AllArgsConstructor
-public class QueueManager {
-  private final List<Queue> queues;
+public class DeclareQueuesManager {
+  private final List<QueueDeclarator> queues;
   private final ConnectionManager manager;
     
   public void declareAllQueues() {
@@ -52,12 +51,5 @@ public class QueueManager {
         );
       }
     }
-  }
-
-  public Optional<Queue> getByAlias(String alias) {
-    return queues
-      .stream()
-      .filter(queue -> queue.hasAlias(alias))
-      .findFirst();
   }
 }

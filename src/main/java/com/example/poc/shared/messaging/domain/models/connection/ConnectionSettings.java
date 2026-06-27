@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.connection;
 
 import static java.util.Optional.ofNullable;
 

@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.message;
 
 import com.example.poc.shared.common.domain.utils.JSON;
 import com.example.poc.shared.exceptions.domain.DisposableMessageException;

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-import static com.example.poc.shared.messaging.domain.models.Connection.OMS;
+import static com.example.poc.shared.messaging.domain.models.connection.Connection.OMS;
 import static com.example.poc.shared.messaging.domain.utils.RabbitUtils.createTemplate;
 import static java.lang.String.format;
 

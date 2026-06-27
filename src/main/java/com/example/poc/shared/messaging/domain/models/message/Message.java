@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.message;
 
 public interface Message<T> {
   long getDeathCount();

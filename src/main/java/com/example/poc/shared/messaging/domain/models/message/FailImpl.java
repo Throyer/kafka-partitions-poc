@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.message;
 
 import static java.time.LocalDateTime.now;
 import java.time.LocalDateTime;

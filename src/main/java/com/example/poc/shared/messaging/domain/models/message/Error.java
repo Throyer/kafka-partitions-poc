@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.message;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 

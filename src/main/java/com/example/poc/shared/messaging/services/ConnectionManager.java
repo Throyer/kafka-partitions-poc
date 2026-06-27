@@ -1,8 +1,8 @@
 package com.example.poc.shared.messaging.services;
 
 import com.example.poc.shared.environments.domain.ConnectionsProperties;
-import com.example.poc.shared.messaging.domain.models.Connection;
-import com.example.poc.shared.messaging.domain.models.ConnectionSettings;
+import com.example.poc.shared.messaging.domain.models.connection.Connection;
+import com.example.poc.shared.messaging.domain.models.connection.ConnectionSettings;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.example.poc.shared.messaging.domain.models.Connection.*;
+import static com.example.poc.shared.messaging.domain.models.connection.Connection.*;
 
 @Service
 public class ConnectionManager {

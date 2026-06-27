@@ -1,13 +1,15 @@
-package com.example.poc.shared.messaging.domain.models;
+package com.example.poc.shared.messaging.domain.models.message;
 
 import static com.example.poc.shared.common.domain.utils.ExceptionUtils.extractMessage;
 import static com.example.poc.shared.common.domain.utils.TimeUtils.elapsedTime;
-import static com.example.poc.shared.messaging.domain.models.ChannelManager.create;
+import static com.example.poc.shared.messaging.domain.models.message.ChannelManager.create;
 import static com.example.poc.shared.messaging.domain.utils.RabbitUtils.fail;
 import static com.example.poc.shared.messaging.domain.utils.RabbitUtils.message;
 import static com.example.poc.shared.messaging.domain.utils.RabbitUtils.parse;
 import static java.time.Instant.now;
 import static java.util.Objects.isNull;
+
+import com.example.poc.shared.messaging.domain.models.settings.QueueSettings;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
 import com.example.poc.shared.exceptions.domain.DisposableMessageException;
@@ -20,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @AllArgsConstructor
 public class RetryManager<T> implements ChannelAwareMessageListener {
-  private final Queue queue;
+  private final QueueSettings queue;
   private final RetryListener<T> listener;
   private final Validator validator;
   

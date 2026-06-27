@@ -1,7 +1,7 @@
 package com.example.poc.modules.aftersale.services;
 
 import com.example.poc.modules.aftersale.domain.models.Event;
-import com.example.poc.shared.messaging.domain.models.Message;
+import com.example.poc.shared.messaging.domain.models.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
