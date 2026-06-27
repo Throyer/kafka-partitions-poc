@@ -69,7 +69,7 @@ public class AfterSaleUpdateDeclarator implements QueueDeclarator {
       .noargs());
 
     for (int index = 0; index < PARTITION_COUNT; index++) {
-      var queue = durable(QUEUE_PREFIX + index)
+      var queue = durable(QUEUE_PREFIX + "-" + index)
         .withArgument("x-single-active-consumer", true)
         .withArgument("x-dead-letter-exchange", EXCHANGE_NAME + "-retry")
         .withArgument("x-dead-letter-routing-key", "retry")

@@ -43,7 +43,7 @@ public class AfterSaleUpdateQueue implements QueueSettings {
   public void setQueue(SimpleMessageListenerContainer container) {
     var queues = IntStream
       .range(0, PARTITION_COUNT)
-      .mapToObj(index -> QUEUE_PREFIX + index)
+      .mapToObj(index -> QUEUE_PREFIX + "-" + index)
       .toArray(String[]::new);    
     container.setQueueNames(queues);
   }
