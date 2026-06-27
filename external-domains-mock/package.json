@@ -1,0 +1,17 @@
+{
+  "name": "external-domains-mock",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.8.0",
+    "hono": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30"
+  }
+}

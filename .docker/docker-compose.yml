@@ -35,6 +35,30 @@ services:
       timeout: 5s
       retries: 5
 
+  external-domains-mock:
+    build:
+      context: ../external-domains-mock
+      dockerfile: Dockerfile
+    container_name: external-domains-mock
+    hostname: external
+    restart: unless-stopped
+    ports:
+      - "${MOCK_PORT:-3001}:3001"
+    environment:
+      PORT: 3001
+      TZ: "${TIMEZONE}"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bun",
+          "-e",
+          "fetch('http://127.0.0.1:3001/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   app:
     image: maven:3.9.9-eclipse-temurin-17
     container_name: backend
