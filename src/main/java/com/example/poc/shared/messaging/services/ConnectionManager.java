@@ -21,19 +21,19 @@ public class ConnectionManager {
     ConnectionsProperties properties,
     
     @Qualifier("tracking-connection")
-    ConnectionFactory tracking/*,
+    ConnectionFactory tracking,
 
     @Qualifier("oms-connection")
     ConnectionFactory oms,
 
     @Qualifier("tms-connection")
-    ConnectionFactory tms*/
+    ConnectionFactory tms
   ) {
     this.properties = properties;
     this.factories = Map.of(
-      TRACKING, tracking/*,
+      TRACKING, tracking,
       OMS, oms,
-      TMS, tms*/
+      TMS, tms
     );
   }
   

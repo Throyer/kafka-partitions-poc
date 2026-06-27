@@ -1,15 +1,14 @@
 package com.example.poc.shared.messaging.services;
 
-import com.example.poc.shared.messaging.domain.models.Queue;
-import com.example.poc.shared.messaging.domain.models.Connection;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.stereotype.Service;
+import com.example.poc.shared.messaging.domain.models.Connection;
+import com.example.poc.shared.messaging.domain.models.Queue;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

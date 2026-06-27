@@ -5,6 +5,8 @@ import com.example.poc.shared.messaging.domain.models.RetryManager;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,14 @@ public class ListenerManager {
   private final ConnectionManager connections;
   private final QueueManager queues;
   private final Validator validator;
+  private final GenericApplicationContext context;
   
-  public void startAllListeners() {    
+  public void startAllListeners() {
+    if (listeners.isEmpty()) {
+      log.warn("nenhum listeners para iniciar.");
+      return;
+    }
+    
     for (var listener : listeners) {
       var queueAlias = getQueue(listener);
       
@@ -44,10 +52,15 @@ public class ListenerManager {
           .getListenerSettings()
           .getCustomManualContainer(factory);
         
-        queue.setQueueOnContainer(container);
+        queue.setQueue(container);
         
         container.setMessageListener(new RetryManager<>(queue, listener, validator));
-        
+
+        var name = format("%s-rabbitmq-listener-%s", connection.name().toLowerCase(), queueAlias);
+
+        context.registerBean(name, SimpleMessageListenerContainer.class, () -> container);
+
+        log.debug("iniciando listener: {}", name);
         container.start();        
       } catch (Exception exception) {
         log.error(

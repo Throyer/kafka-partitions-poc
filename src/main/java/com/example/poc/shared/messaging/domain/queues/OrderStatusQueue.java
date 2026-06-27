@@ -8,7 +8,9 @@ import static org.springframework.amqp.core.ExchangeBuilder.headersExchange;
 import static org.springframework.amqp.core.QueueBuilder.durable;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import com.example.poc.shared.common.domain.models.Time;
 import com.example.poc.shared.messaging.domain.models.Connection;
@@ -16,7 +18,13 @@ import com.example.poc.shared.messaging.domain.models.Queue;
 
 @Component
 public class OrderStatusQueue implements Queue {
-  public static final String ALIAS = "order-status";
+  public static final String ORDER_STATUS_ALIAS = "order-status";
+  
+  private final RabbitTemplate template;
+
+  public OrderStatusQueue(@Qualifier("oms-template") RabbitTemplate template) {
+    this.template = template;
+  }
   
   @Override
   public Connection connection() {
@@ -25,7 +33,7 @@ public class OrderStatusQueue implements Queue {
 
   @Override
   public String alias() {
-    return ALIAS;
+    return ORDER_STATUS_ALIAS;
   }
 
   @Override
@@ -75,8 +83,12 @@ public class OrderStatusQueue implements Queue {
   }
 
   @Override
-  public SimpleMessageListenerContainer setQueueOnContainer(SimpleMessageListenerContainer container) {
+  public void setQueue(SimpleMessageListenerContainer container) {
     container.setQueueNames("order.after-sale");
-    return container;
+  }
+
+  @Override
+  public <T> void publish(T content) {
+    template.convertAndSend("order.after-sale", "order-status", content);
   }
 }

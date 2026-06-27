@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Event {
-  private String code;
   private String orderNumber;
+  private String statusCode;
   private Trigger trigger;
   private LocalDateTime timestamp;
 }

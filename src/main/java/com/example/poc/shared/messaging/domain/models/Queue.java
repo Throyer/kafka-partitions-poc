@@ -1,5 +1,6 @@
 package com.example.poc.shared.messaging.domain.models;
 
+import java.util.Map;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import com.example.poc.shared.common.domain.models.Time;
@@ -14,7 +15,11 @@ public interface Queue {
   
   void declare(RabbitAdmin admin);
   
-  SimpleMessageListenerContainer setQueueOnContainer(SimpleMessageListenerContainer container);
+  void setQueue(SimpleMessageListenerContainer container);
+  
+  default <T> void publish(T content) { }
+
+  default <T> void publish(T content, Map<String, String> headers) { }
 
   default Boolean hasAlias(String alias) {
     return alias().equalsIgnoreCase(alias);
