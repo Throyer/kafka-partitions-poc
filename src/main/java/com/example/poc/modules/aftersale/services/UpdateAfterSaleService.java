@@ -6,14 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static org.springframework.amqp.support.AmqpHeaders.CONSUMER_QUEUE;
-
 @Slf4j
 @Service
 @AllArgsConstructor
 public class UpdateAfterSaleService {  
   public void update(Message<Event> message) {
-    var queue = message.<String>getHeader(CONSUMER_QUEUE);
+    var queue = message.consumerQueue();
     var event = message.getBody();
     
     log.info(

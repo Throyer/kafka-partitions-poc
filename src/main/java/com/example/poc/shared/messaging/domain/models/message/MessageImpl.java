@@ -20,6 +20,11 @@ public class MessageImpl<T> implements Message<T> {
   }
 
   @Override
+  public String consumerQueue() {
+    return properties.getConsumerQueue();
+  }
+
+  @Override
   public boolean alreadyReachedMaxOfAttempts() {
     return manager.alreadyReachedMaxOfAttempts();
   }
