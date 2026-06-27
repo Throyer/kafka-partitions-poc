@@ -1,6 +1,15 @@
 package com.example.poc.shared.messaging.domain.models;
 
+import lombok.Getter;
+
+@Getter
 public enum QueueAlias {
-  TRACKING_UPDATE_AFTERSALE,
-  OMS_ORDER_STATUS
+  TRACKING_UPDATE_AFTERSALE("update-after-sale-queue"),
+  OMS_ORDER_STATUS("order-status-queue");
+
+  private final String description;
+
+  QueueAlias(String description) {
+    this.description = description;
+  }
 }

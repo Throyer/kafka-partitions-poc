@@ -56,7 +56,7 @@ public class ListenerManager {
         
         container.setMessageListener(new RetryManager<>(queueSettings, listener, validator));
 
-        var name = format("%s-rabbitmq-listener-%s", connection.name().toLowerCase(), queueAlias);
+        var name = format("%s-rabbitmq-listener-%s", connection.name().toLowerCase(), queueAlias.getDescription());
 
         context.registerBean(name, SimpleMessageListenerContainer.class, () -> container);
 
