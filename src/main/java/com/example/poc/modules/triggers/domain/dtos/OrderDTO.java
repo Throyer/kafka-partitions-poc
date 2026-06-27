@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -26,8 +27,8 @@ public class OrderDTO implements ExternalTriggerEvent {
   private Long orderNumber;
   private Status status;
   private List<HistoricStatus> historicStatus;
+  private List<Item> items;
   
-
   @Getter
   @Setter
   @NoArgsConstructor
@@ -36,6 +37,16 @@ public class OrderDTO implements ExternalTriggerEvent {
     @NotNull
     private Integer id;
     private String name;
+  }
+  
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Item {
+    private Long productId;
+    private BigDecimal totalItem;
+    private Integer quantity;
   }
 
   @Getter
