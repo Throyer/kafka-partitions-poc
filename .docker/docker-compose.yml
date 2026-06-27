@@ -2,10 +2,13 @@ services:
   rabbitmq:
     image: rabbitmq:3.10.7-management
     container_name: rabbitmq
+    hostname: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
     volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
       - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
     environment:
       RABBITMQ_DEFAULT_USER: root

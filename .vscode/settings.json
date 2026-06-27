@@ -6,11 +6,18 @@
   "java.format.settings.profile": "poc",
   "editor.inlayHints.enabled": "off",
   "cSpell.words": [
+    "amqp",
     "Amqp",
+    "databind",
     "declarables",
+    "fasterxml",
     "github",
     "isometricgame",
+    "jackson",
+    "oder",
+    "poststart",
     "rabbitmq",
+    "springframework",
     "throyer",
     "verygeneric"
   ],
