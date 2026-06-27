@@ -8,12 +8,16 @@ const paymentsCache = new Map<string, Payment>();
 const productsCache = new Map<string, Product>();
 
 const ORDER_STATUSES: OrderStatus[] = [
-  { id: 1, name: "CRIADO" },
-  { id: 2, name: "PAGO" },
-  { id: 3, name: "EM_SEPARACAO" },
-  { id: 4, name: "ENVIADO" },
-  { id: 5, name: "ENTREGUE" },
-  { id: 6, name: "CANCELADO" },
+  { id: 175, name: "INTEGRADO" },
+  { id: 1011, name: "CRIADO" },
+  { id: 102, name: "AGUARDANDO_PAGAMENTO" },
+  { id: 103, name: "PAGAMENTO_APROVADO" },
+  { id: 109, name: "EM_SEPARACAO" },
+  { id: 112, name: "SEPARADP" },
+  { id: 126, name: "NOTA_FISCAL_EMITIDA" },
+  { id: 148, name: "EM_PROCESSO_DE_ENTREGA" },
+  { id: 137, name: "ENTREGE" },
+  { id: 134, name: "CANCELADO" },
 ];
 
 const PAYMENT_TYPES = ["CREDIT_CARD", "DEBIT_CARD", "PIX", "BOLETO", "VOUCHER"];
