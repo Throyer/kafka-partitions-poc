@@ -1,6 +1,6 @@
 export type Customer = {
   id: string;
-  nome: string;
+  name: string;
   email: string;
 };
 

@@ -70,7 +70,7 @@ public class CreateAfterSaleCompleteService {
       orderNumber,
       new Customer(
         customer.getId(),
-        customer.getNome(),
+        customer.getName(),
         customer.getEmail()
       ),
       new Payment(

@@ -47,7 +47,7 @@ export function getCustomer(customerId: string): Customer {
   return getOrCreate(customersCache, customerId, () =>
     withSeed(`customer:${customerId}`, () => ({
       id: customerId,
-      nome: faker.person.fullName(),
+      name: faker.person.fullName(),
       email: faker.internet.email(),
     })),
   );
