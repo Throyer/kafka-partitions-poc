@@ -6,4 +6,4 @@ target/
 .settings/
 .DS_Store
 .docker/.env
-external-domains-mock/node_modules/
+node_modules/

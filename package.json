@@ -1,0 +1,11 @@
+{
+  "name": "poc-aftersale-rabbitmq",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "load": "bun load-simulator.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30"
+  }
+}
