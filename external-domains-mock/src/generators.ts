@@ -1,10 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { getOrCreate, seedFromKey } from "./cache";
-import type { Customer, Order, OrderItem, OrderStatus, Payment } from "./types";
+import type { Customer, Order, OrderItem, OrderStatus, Payment, Product } from "./types";
 
 const customersCache = new Map<string, Customer>();
 const ordersCache = new Map<string, Order>();
 const paymentsCache = new Map<string, Payment>();
+const productsCache = new Map<string, Product>();
 
 const ORDER_STATUSES: OrderStatus[] = [
   { id: 1, name: "CRIADO" },
@@ -85,5 +86,20 @@ export function getPayment(orderNumber: string): Payment {
       paymentType: faker.helpers.arrayElement(PAYMENT_TYPES),
       totalValue: Number(faker.commerce.price({ min: 10, max: 5000, dec: 2 })),
     })),
+  );
+}
+
+export function getProduct(sku: string): Product {
+  return getOrCreate(productsCache, sku, () =>
+    withSeed(`product:${sku}`, () => {
+      const parsedSku = Number(sku);
+
+      return {
+        sku: Number.isNaN(parsedSku) ? faker.number.int({ min: 1000, max: 999999 }) : parsedSku,
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        imageUrl: `https://picsum.photos/seed/${sku}/400/400`,
+      };
+    }),
   );
 }

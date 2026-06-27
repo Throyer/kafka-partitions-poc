@@ -32,3 +32,10 @@ export type Payment = {
   paymentType: string;
   totalValue: number;
 };
+
+export type Product = {
+  sku: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+};
