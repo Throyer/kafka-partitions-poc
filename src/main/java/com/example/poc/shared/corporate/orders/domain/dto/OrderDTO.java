@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,7 @@ public class OrderDTO {
   private Long orderNumber;
   private Status status;
   private List<HistoricStatus> historicStatus;
+  private List<Item> items;
 
   @Getter
   @Setter
@@ -23,6 +25,16 @@ public class OrderDTO {
   public static class Status {
     private Integer id;
     private String name;
+  }
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Item {
+    private Long productId;
+    private BigDecimal totalItem;
+    private Integer quantity;
   }
 
   @Getter

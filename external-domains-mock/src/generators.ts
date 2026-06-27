@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { getOrCreate, seedFromKey } from "./cache";
-import type { Customer, Order, OrderStatus, Payment } from "./types";
+import type { Customer, Order, OrderItem, OrderStatus, Payment } from "./types";
 
 const customersCache = new Map<string, Customer>();
 const ordersCache = new Map<string, Order>();
@@ -27,6 +27,19 @@ function withSeed<T>(key: string, factory: () => T): T {
 function formatDateTime(date: Date): string {
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
+function buildOrderItems(): OrderItem[] {
+  return Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () => {
+    const quantity = faker.number.int({ min: 1, max: 10 });
+    const unitPrice = Number(faker.commerce.price({ min: 5, max: 500, dec: 2 }));
+
+    return {
+      productId: faker.number.int({ min: 1000, max: 999999 }),
+      quantity,
+      totalItem: Number((unitPrice * quantity).toFixed(2)),
+    };
+  });
 }
 
 export function getCustomer(customerId: string): Customer {
@@ -59,6 +72,7 @@ export function getOrder(orderNumber: string): Order {
         orderNumber: Number.isNaN(parsedOrderNumber) ? faker.number.int({ min: 100000, max: 999999 }) : parsedOrderNumber,
         status: currentStatus,
         historicStatus,
+        items: buildOrderItems(),
       };
     }),
   );
