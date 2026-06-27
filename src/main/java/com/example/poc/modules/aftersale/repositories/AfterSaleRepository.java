@@ -5,5 +5,6 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface AfterSaleRepository extends MongoRepository<AfterSale, String> {
+  boolean existsByOrderNumber(String orderNumber);
   Optional<AfterSale> findByOrderNumber(String orderNumber);
 }

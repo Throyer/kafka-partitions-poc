@@ -2,7 +2,7 @@ package com.example.poc.modules.triggers.messaging.producers;
 
 import static com.example.poc.shared.messaging.domain.models.QueueAlias.OMS_ORDER_STATUS;
 import org.springframework.stereotype.Service;
-import com.example.poc.modules.triggers.domain.dtos.OrderDTO;
+import com.example.poc.shared.corporate.orders.domain.dto.OrderDTO;
 import com.example.poc.shared.messaging.services.PublisherManager;
 import lombok.AllArgsConstructor;
 

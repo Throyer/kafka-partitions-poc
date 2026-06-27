@@ -9,7 +9,12 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class EventParametersIml implements EventParameters {
   private final Event event;
-  
+
+  @Override
+  public String orderNumber() {
+    return event.getOrderNumber();
+  }
+
   @Override
   public boolean hasTrigger(Trigger... candidates) {
     if (candidates.length == 0) {

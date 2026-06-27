@@ -21,6 +21,7 @@ export type OrderItem = {
 };
 
 export type Order = {
+  customerId: string;
   orderNumber: number;
   status: OrderStatus;
   historicStatus: HistoricStatus[];

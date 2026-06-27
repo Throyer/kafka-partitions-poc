@@ -1,27 +1,27 @@
 package com.example.poc.modules.aftersale.domain.models;
 
+import static org.springframework.beans.BeanUtils.copyProperties;
 import java.util.List;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.example.poc.modules.timeline.domain.models.Timeline;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Document(collection = "after_sales")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AfterSale {
-  @Id
+public class AfterSaleWithTimeline {
   private String id;
-
-  @Indexed
   private String orderNumber;
-  
   private Customer customer;
   private Payment payment;
+  private Timeline timeline;
   private List<Item> items;
+
+  public AfterSaleWithTimeline(AfterSale afterSale, Timeline timeline) {
+    copyProperties(afterSale, this);
+    this.timeline = timeline;
+  }
 }

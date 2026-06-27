@@ -1,6 +1,8 @@
-package com.example.poc.modules.aftersale.domain.models;
+package com.example.poc.modules.timeline.domain.models.database;
 
 import java.time.LocalDateTime;
+
+import com.example.poc.modules.aftersale.domain.models.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +26,10 @@ public class ReceivedEvent {
   private Event event;
 
   private LocalDateTime createdAt;
+
+  public ReceivedEvent(Event event) {
+    this.orderNumber = event.getOrderNumber();
+    this.event = event;
+    this.createdAt = LocalDateTime.now();
+  }
 }

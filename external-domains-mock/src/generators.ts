@@ -70,6 +70,7 @@ export function getOrder(orderNumber: string): Order {
       }));
 
       return {
+        customerId: faker.string.uuid(),
         orderNumber: Number.isNaN(parsedOrderNumber) ? faker.number.int({ min: 100000, max: 999999 }) : parsedOrderNumber,
         status: currentStatus,
         historicStatus,
