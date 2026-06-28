@@ -1,13 +1,12 @@
 package com.example.poc.modules.aftersale.services;
 
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 import com.example.poc.modules.aftersale.domain.models.AfterSale;
 import com.example.poc.modules.aftersale.domain.models.AfterSaleWithTimeline;
 import com.example.poc.modules.aftersale.repositories.AfterSaleRepository;
 import com.example.poc.modules.timeline.services.ComposeTimelineService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +20,10 @@ public class AfterSaleService {
   
   public boolean exists(String orderNumber) {
     return repository.existsByOrderNumber(orderNumber);
+  }
+
+  public void save(AfterSale afterSale) {
+    repository.save(afterSale);
   }
   
   public AfterSaleWithTimeline show(String orderNumber) {

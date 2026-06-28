@@ -1,17 +1,18 @@
-package com.example.poc.modules.aftersale.services;
+package com.example.poc.modules.updaters.services;
 
+import org.springframework.stereotype.Service;
 import com.example.poc.modules.aftersale.domain.models.Event;
+import com.example.poc.modules.aftersale.services.AfterSaleService;
+import com.example.poc.modules.aftersale.services.CreateAfterSaleCompleteService;
 import com.example.poc.modules.timeline.services.CreateReceivedEventService;
-import com.example.poc.modules.updaters.services.UpdatersManager;
 import com.example.poc.shared.messaging.domain.models.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UpdateAfterSaleServiceAndRegisterEventService {
+public class UpdateAfterSaleService {
   private final AfterSaleService afterSaleService;
   private final CreateAfterSaleCompleteService createAfterSaleService;
   private final CreateReceivedEventService createReceivedEventService;
@@ -29,7 +30,7 @@ public class UpdateAfterSaleServiceAndRegisterEventService {
       event.getStatusCode()
     );
     
-    if (!event.is("CRIADO")) {
+    if (!event.is("1011")) {
       if (!afterSaleService.exists(orderNumber)) {
         createAfterSaleService.create(orderNumber);
         return;        

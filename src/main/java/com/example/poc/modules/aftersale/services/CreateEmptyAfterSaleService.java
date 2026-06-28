@@ -1,5 +1,9 @@
 package com.example.poc.modules.aftersale.services;
 
+import static java.util.Objects.isNull;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Service;
 import com.example.poc.modules.aftersale.domain.models.AfterSale;
 import com.example.poc.modules.aftersale.domain.models.Customer;
 import com.example.poc.modules.aftersale.domain.models.Item;
@@ -10,11 +14,6 @@ import com.example.poc.shared.corporate.orders.services.OrdersService;
 import com.example.poc.shared.corporate.payments.services.PaymentsService;
 import com.example.poc.shared.corporate.products.services.ProductsService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-
-import static java.util.Objects.isNull;
 
 @Service
 @AllArgsConstructor
@@ -67,6 +66,7 @@ public class CreateEmptyAfterSaleService {
         payment.getPaymentType(),
         payment.getTotalValue()
       ),
+      List.of(),
       items
     );
 

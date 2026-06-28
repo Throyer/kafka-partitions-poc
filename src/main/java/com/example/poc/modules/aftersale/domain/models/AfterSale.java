@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.example.poc.modules.aftersale.domain.models.rupture.Rupture;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,6 @@ public class AfterSale {
   
   private Customer customer;
   private Payment payment;
+  private List<Rupture> rupture;
   private List<Item> items;
 }
