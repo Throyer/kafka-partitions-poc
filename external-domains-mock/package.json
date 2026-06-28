@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/index.ts",
-    "dev": "bun --watch src/index.ts"
+    "dev": "bun --watch src/index.ts",
+    "load": "bun run src/load-simulator.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.8.0",

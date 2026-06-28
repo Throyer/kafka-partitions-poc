@@ -1,45 +1,8 @@
 #!/usr/bin/env bun
 
-type OrderStatus = {
-  id: number;
-  name: string;
-};
-
-type OrderItem = {
-  productId: number;
-  quantity: number;
-  totalItem: number;
-};
-
-type HistoricStatus = {
-  creationDate: string;
-  status: OrderStatus;
-};
-
-type OrderPayload = {
-  customerId: string;
-  orderNumber: number;
-  status: OrderStatus;
-  historicStatus: HistoricStatus[];
-  items: OrderItem[];
-};
-
-const ORDER_STATUSES: OrderStatus[] = [
-  { id: 175, name: "INTEGRADO" },
-  { id: 1011, name: "CRIADO" },
-  { id: 102, name: "AGUARDANDO_PAGAMENTO" },
-  { id: 103, name: "PAGAMENTO_APROVADO" },
-  { id: 109, name: "EM_SEPARACAO" },
-  { id: 145, name: "RUPTURA_PARCIAL" },
-  { id: 112, name: "SEPARADP" },
-  { id: 126, name: "NOTA_FISCAL_EMITIDA" },
-  { id: 148, name: "EM_PROCESSO_DE_ENTREGA" },
-  { id: 137, name: "ENTREGE" },
-  { id: 134, name: "CANCELADO" },
-];
-
-const CANCELADO = ORDER_STATUSES.find((status) => status.name === "CANCELADO")!;
-const HAPPY_PATH = ORDER_STATUSES.filter((status) => status.name !== "CANCELADO");
+import { formatDateTime } from "./date-utils";
+import { CANCELADO, HAPPY_PATH } from "./order-statuses";
+import type { HistoricStatus, Order, OrderItem, OrderStatus } from "./types";
 
 type Config = {
   baseUrl: string;
@@ -140,7 +103,7 @@ function printHelp() {
 Simulador de carga de pedidos via POST /triggers/publish/order
 
 Uso:
-  bun load-simulator.ts [opções]
+  bun run load [opções]
 
 Opções:
   --base-url <url>             URL da API (default: http://localhost:8080)
@@ -156,7 +119,7 @@ Variáveis de ambiente equivalentes:
   BASE_URL, ORDERS, DELAY_MS, CONCURRENCY, CANCEL_RATE, ORDER_NUMBER_START, JITTER_MS
 
 Exemplo:
-  bun load-simulator.ts --orders 50 --concurrency 10 --delay-ms 500
+  bun run load -- --orders 50 --concurrency 10 --delay-ms 500
 `.trim());
 }
 
@@ -166,11 +129,6 @@ function sleep(ms: number) {
 
 function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function formatDateTime(date: Date) {
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
 function buildItems(seed: number): OrderItem[] {
@@ -201,7 +159,7 @@ function buildOrderPayload(
   items: OrderItem[],
   statuses: OrderStatus[],
   startedAt: Date,
-): OrderPayload {
+): Order {
   const currentStatus = statuses.at(-1)!;
 
   return {
@@ -213,7 +171,7 @@ function buildOrderPayload(
   };
 }
 
-async function publishOrder(baseUrl: string, payload: OrderPayload) {
+async function publishOrder(baseUrl: string, payload: Order) {
   const response = await fetch(`${baseUrl}/triggers/publish/order`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -226,7 +184,7 @@ async function publishOrder(baseUrl: string, payload: OrderPayload) {
   }
 }
 
-function resolveStatuses(orderNumber: number, cancelRate: number): OrderStatus[] {
+function resolveStatuses(cancelRate: number): OrderStatus[] {
   const shouldCancel = Math.random() < cancelRate;
 
   if (!shouldCancel) {
@@ -240,7 +198,7 @@ function resolveStatuses(orderNumber: number, cancelRate: number): OrderStatus[]
 async function simulateOrder(config: Config, orderNumber: number, stats: Stats) {
   const customerId = crypto.randomUUID();
   const items = buildItems(orderNumber);
-  const statuses = resolveStatuses(orderNumber, config.cancelRate);
+  const statuses = resolveStatuses(config.cancelRate);
   const startedAt = new Date();
 
   for (let step = 0; step < statuses.length; step += 1) {

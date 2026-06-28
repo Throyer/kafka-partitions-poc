@@ -60,13 +60,13 @@ Publica pedidos avançando pelos status via `POST /triggers/publish/order`.
 
 ```bash
 # instalar dependências (primeira vez)
-bun install
+bun install --cwd external-domains-mock
 
 # execução padrão (20 pedidos, 5 em paralelo)
-bun run load
+bun run --cwd external-domains-mock load
 
 # exemplo com parâmetros
-bun load-simulator.ts --orders 50 --concurrency 10 --delay-ms 500
+bun run --cwd external-domains-mock load -- --orders 50 --concurrency 10 --delay-ms 500
 ```
 
 | Opção | Default | Descrição |

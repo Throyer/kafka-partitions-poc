@@ -1,25 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { getOrCreate, seedFromKey } from "./cache";
-import type { Customer, Order, OrderItem, OrderStatus, Payment, Product } from "./types";
+import { formatDateTime } from "./date-utils";
+import { ORDER_STATUSES } from "./order-statuses";
+import type { Customer, Order, OrderItem, Payment, Product } from "./types";
 
 const customersCache = new Map<string, Customer>();
 const ordersCache = new Map<string, Order>();
 const paymentsCache = new Map<string, Payment>();
 const productsCache = new Map<string, Product>();
-
-const ORDER_STATUSES: OrderStatus[] = [
-  { id: 175, name: "INTEGRADO" },
-  { id: 1011, name: "CRIADO" },
-  { id: 102, name: "AGUARDANDO_PAGAMENTO" },
-  { id: 103, name: "PAGAMENTO_APROVADO" },
-  { id: 109, name: "EM_SEPARACAO" },
-  { id: 145, name: "RUPTURA_PARCIAL" },
-  { id: 112, name: "SEPARADP" },
-  { id: 126, name: "NOTA_FISCAL_EMITIDA" },
-  { id: 148, name: "EM_PROCESSO_DE_ENTREGA" },
-  { id: 137, name: "ENTREGE" },
-  { id: 134, name: "CANCELADO" },
-];
 
 const PAYMENT_TYPES = ["CREDIT_CARD", "DEBIT_CARD", "PIX", "BOLETO", "VOUCHER"];
 
@@ -28,11 +16,6 @@ function withSeed<T>(key: string, factory: () => T): T {
   const value = factory();
   faker.seed();
   return value;
-}
-
-function formatDateTime(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
 function buildOrderItems(): OrderItem[] {
