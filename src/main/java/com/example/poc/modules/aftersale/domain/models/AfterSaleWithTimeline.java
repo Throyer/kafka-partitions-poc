@@ -2,6 +2,7 @@ package com.example.poc.modules.aftersale.domain.models;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
 import java.util.List;
+import com.example.poc.modules.aftersale.domain.models.rupture.Rupture;
 import com.example.poc.modules.timeline.domain.models.Timeline;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,8 @@ public class AfterSaleWithTimeline {
   private String orderNumber;
   private Customer customer;
   private Payment payment;
-  private Timeline timeline;
+  private Timeline timeline;  
+  private List<Rupture> rupture;
   private List<Item> items;
 
   public AfterSaleWithTimeline(AfterSale afterSale, Timeline timeline) {
