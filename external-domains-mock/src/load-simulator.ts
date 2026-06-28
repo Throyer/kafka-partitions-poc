@@ -6,6 +6,7 @@ import type { HistoricStatus, Order, OrderItem, OrderStatus } from "./types";
 
 type Config = {
   baseUrl: string;
+  mockBaseUrl: string;
   orders: number;
   delayMs: number;
   concurrency: number;
@@ -22,6 +23,7 @@ type Stats = {
 function parseArgs(argv: string[]): Config {
   const defaults: Config = {
     baseUrl: process.env.BASE_URL ?? "http://localhost:8080",
+    mockBaseUrl: process.env.MOCK_BASE_URL ?? "http://localhost:3001",
     orders: Number(process.env.ORDERS ?? 20),
     delayMs: Number(process.env.DELAY_MS ?? 750),
     concurrency: Number(process.env.CONCURRENCY ?? 5),
@@ -52,6 +54,9 @@ function parseArgs(argv: string[]): Config {
     switch (arg) {
       case "--base-url":
         config.baseUrl = readValue();
+        break;
+      case "--mock-base-url":
+        config.mockBaseUrl = readValue();
         break;
       case "--orders":
         config.orders = Number(readValue());
@@ -107,6 +112,7 @@ Uso:
 
 Opções:
   --base-url <url>             URL da API (default: http://localhost:8080)
+  --mock-base-url <url>        URL do external-domains-mock (default: http://localhost:3001)
   --orders <n>                 Quantidade de pedidos (default: 20)
   --delay-ms <ms>              Intervalo entre avanços de status (default: 750)
   --concurrency <n>            Pedidos simulados em paralelo (default: 5)
@@ -116,7 +122,7 @@ Opções:
   -h, --help                   Exibe esta ajuda
 
 Variáveis de ambiente equivalentes:
-  BASE_URL, ORDERS, DELAY_MS, CONCURRENCY, CANCEL_RATE, ORDER_NUMBER_START, JITTER_MS
+  BASE_URL, MOCK_BASE_URL, ORDERS, DELAY_MS, CONCURRENCY, CANCEL_RATE, ORDER_NUMBER_START, JITTER_MS
 
 Exemplo:
   bun run load -- --orders 50 --concurrency 10 --delay-ms 500
@@ -171,6 +177,21 @@ function buildOrderPayload(
   };
 }
 
+async function syncOrderToMock(mockBaseUrl: string, payload: Order) {
+  const response = await fetch(`${mockBaseUrl}/orders/${payload.orderNumber}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(
+      `HTTP ${response.status} ao sincronizar pedido ${payload.orderNumber} no mock: ${body}`,
+    );
+  }
+}
+
 async function publishOrder(baseUrl: string, payload: Order) {
   const response = await fetch(`${baseUrl}/triggers/publish/order`, {
     method: "POST",
@@ -184,10 +205,8 @@ async function publishOrder(baseUrl: string, payload: Order) {
   }
 }
 
-function resolveStatuses(cancelRate: number): OrderStatus[] {
-  const shouldCancel = Math.random() < cancelRate;
-
-  if (!shouldCancel) {
+function resolveStatusPath(cancelRate: number): OrderStatus[] {
+  if (Math.random() >= cancelRate) {
     return [...HAPPY_PATH];
   }
 
@@ -198,18 +217,28 @@ function resolveStatuses(cancelRate: number): OrderStatus[] {
 async function simulateOrder(config: Config, orderNumber: number, stats: Stats) {
   const customerId = crypto.randomUUID();
   const items = buildItems(orderNumber);
-  const statuses = resolveStatuses(config.cancelRate);
+  const statusPath = resolveStatusPath(config.cancelRate);
+  const historicStatuses: OrderStatus[] = [];
   const startedAt = new Date();
 
-  for (let step = 0; step < statuses.length; step += 1) {
-    const currentStatuses = statuses.slice(0, step + 1);
-    const payload = buildOrderPayload(orderNumber, customerId, items, currentStatuses, startedAt);
+  for (let step = 0; step < statusPath.length; step += 1) {
+    const nextStatus = statusPath[step]!;
+
+    if (historicStatuses.some((status) => status.id === nextStatus.id)) {
+      throw new Error(
+        `pedido ${orderNumber}: status ${nextStatus.id} (${nextStatus.name}) repetido na posição ${step + 1}`,
+      );
+    }
+
+    historicStatuses.push(nextStatus);
+    const payload = buildOrderPayload(orderNumber, customerId, items, historicStatuses, startedAt);
 
     try {
+      await syncOrderToMock(config.mockBaseUrl, payload);
       await publishOrder(config.baseUrl, payload);
       stats.published += 1;
       console.log(
-        `[ok] pedido ${orderNumber} -> ${payload.status.id} ${payload.status.name} (${step + 1}/${statuses.length})`,
+        `[ok] pedido ${orderNumber} -> ${payload.status.id} ${payload.status.name} (${step + 1}/${statusPath.length})`,
       );
     } catch (error) {
       stats.failed += 1;
@@ -217,7 +246,7 @@ async function simulateOrder(config: Config, orderNumber: number, stats: Stats) 
       return;
     }
 
-    if (step < statuses.length - 1) {
+    if (step < statusPath.length - 1) {
       const waitMs = config.delayMs + randomInt(0, config.jitterMs);
       await sleep(waitMs);
     }
@@ -254,6 +283,7 @@ async function main() {
     JSON.stringify(
       {
         baseUrl: config.baseUrl,
+        mockBaseUrl: config.mockBaseUrl,
         orders: config.orders,
         concurrency: config.concurrency,
         delayMs: config.delayMs,

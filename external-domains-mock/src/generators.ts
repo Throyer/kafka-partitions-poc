@@ -41,6 +41,10 @@ export function getCustomer(customerId: string): Customer {
   );
 }
 
+export function setOrder(order: Order): void {
+  ordersCache.set(String(order.orderNumber), order);
+}
+
 export function getOrder(orderNumber: string): Order {
   return getOrCreate(ordersCache, orderNumber, () =>
     withSeed(`order:${orderNumber}`, () => {

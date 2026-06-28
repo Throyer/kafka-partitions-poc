@@ -66,7 +66,7 @@ bun install --cwd external-domains-mock
 bun run --cwd external-domains-mock load
 
 # exemplo com parâmetros
-bun run --cwd external-domains-mock load -- --orders 50 --concurrency 10 --delay-ms 500
+bun run --cwd external-domains-mock load --orders 50 --concurrency 10 --delay-ms 500
 ```
 
 | Opção | Default | Descrição |
