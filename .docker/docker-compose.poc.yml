@@ -14,6 +14,11 @@ x-app-base: &app-base
   depends_on:
     rabbitmq:
       condition: service_healthy
+  deploy:
+    resources:
+      limits:
+        cpus: "0.60"
+        memory: "250MB"
 
 services:
   database:
@@ -30,7 +35,11 @@ services:
       MONGO_INITDB_ROOT_DATABASE: root_database
     volumes:
       - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-      - ~/.volumes/pocs/aftersale-estruturante/database/mongodb:/data/db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.60"
+          memory: "270MB"
 
   rabbitmq:
     image: rabbitmq:3.10.7-management
@@ -51,6 +60,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "0.55"
+          memory: "270MB"
 
   external-domains-mock:
     build:
@@ -104,3 +118,8 @@ services:
       - app-1
       - app-2
       - app-3
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: "10MB"
