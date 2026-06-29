@@ -1,5 +1,7 @@
 {
   "editor.inlineSuggest.enabled": false,
+  "spring-boot.ls.problem.application-properties.PROP_UNKNOWN_PROPERTY": "IGNORE",
+  "boot-java.validation.java.version-validation": "OFF",
   "java.configuration.maven.userSettings": "${workspaceFolder}/.maven/settings.xml",
   "java.format.settings.url": "${workspaceFolder}/.vscode/java-formatter.xml",
   "java.configuration.updateBuildConfiguration": "automatic",
@@ -9,6 +11,7 @@
     "aftersale",
     "amqp",
     "Amqp",
+    "ansi",
     "confluentinc",
     "cpus",
     "databind",
