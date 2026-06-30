@@ -22,7 +22,7 @@ app.get("/products/:sku", (c) => c.json(getProduct(c.req.param("sku"))));
 
 const PORT = Number(process.env.PORT ?? 3001);
 
-console.log(`external-domains-mock listening on http://localhost:${PORT}`);
+console.log(`mocks listening on http://localhost:${PORT}`);
 
 export default {
   port: PORT,

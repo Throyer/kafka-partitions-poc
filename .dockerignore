@@ -1,6 +1,5 @@
 target/
 .git/
 .docker/
-external-domains-mock/
 .vscode/
 .idea/

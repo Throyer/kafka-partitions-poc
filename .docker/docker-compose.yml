@@ -35,11 +35,11 @@ services:
       timeout: 5s
       retries: 5
 
-  external-domains-mock:
+  mocks:
     build:
-      context: ../external-domains-mock
+      context: ./mocks
       dockerfile: Dockerfile
-    container_name: external-domains-mock
+    container_name: mocks
     hostname: external
     restart: unless-stopped
     ports:
@@ -72,14 +72,14 @@ services:
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
       DB_URI: mongodb://root:root@database:27017/after_sale
-      CORPORATE_CUSTOMERS_HOST: http://external-domains-mock:3001
-      CORPORATE_ORDERS_HOST: http://external-domains-mock:3001
-      CORPORATE_PAYMENTS_HOST: http://external-domains-mock:3001
-      CORPORATE_PRODUCTS_HOST: http://external-domains-mock:3001
+      CORPORATE_CUSTOMERS_HOST: http://mocks:3001
+      CORPORATE_ORDERS_HOST: http://mocks:3001
+      CORPORATE_PAYMENTS_HOST: http://mocks:3001
+      CORPORATE_PRODUCTS_HOST: http://mocks:3001
     depends_on:
       database:
         condition: service_started
-      external-domains-mock:
+      mocks:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy

@@ -112,7 +112,7 @@ Uso:
 
 Opções:
   --base-url <url>             URL da API (default: http://localhost:8080)
-  --mock-base-url <url>        URL do external-domains-mock (default: http://localhost:3001)
+  --mock-base-url <url>        URL do mock (default: http://localhost:3001)
   --orders <n>                 Quantidade de pedidos (default: 20)
   --delay-ms <ms>              Intervalo entre avanços de status (default: 750)
   --concurrency <n>            Pedidos simulados em paralelo (default: 5)

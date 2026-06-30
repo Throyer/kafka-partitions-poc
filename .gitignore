@@ -7,3 +7,4 @@ target/
 .DS_Store
 .docker/.env
 node_modules/
+.docker/mocks/node_modules/
