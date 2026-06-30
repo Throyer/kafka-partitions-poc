@@ -1,6 +1,5 @@
 package com.example.poc.shared.messaging.rabbitmq.domain.queues;
 
-import static com.example.poc.shared.messaging.rabbitmq.domain.models.QueueAlias.TRACKING_UPDATE_AFTERSALE;
 import static com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection.TRACKING;
 import java.util.stream.IntStream;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
@@ -11,7 +10,7 @@ import com.example.poc.shared.messaging.rabbitmq.domain.models.settings.QueueSet
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 public class AfterSaleUpdateQueue implements QueueSettings {
   public static final int PARTITION_COUNT = 8;
   
@@ -26,7 +25,7 @@ public class AfterSaleUpdateQueue implements QueueSettings {
 
   @Override
   public QueueAlias alias() {
-    return TRACKING_UPDATE_AFTERSALE;
+    return null;
   }
   
   @Override

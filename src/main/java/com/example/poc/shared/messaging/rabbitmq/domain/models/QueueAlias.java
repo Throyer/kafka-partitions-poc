@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum QueueAlias {
-  TRACKING_UPDATE_AFTERSALE("update-after-sale-queue"),
   OMS_ORDER_STATUS("order-status-queue");
 
   private final String description;

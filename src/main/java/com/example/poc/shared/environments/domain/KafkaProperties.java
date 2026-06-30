@@ -11,6 +11,7 @@ import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CL
 import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -42,6 +43,12 @@ public class KafkaProperties {
 
   public DefaultKafkaConsumerFactory<String, Object> toConsumerFactory() {
     return new DefaultKafkaConsumerFactory<>(toConsumerConfigs());
+  }
+
+  public Map<String, Object> toAdminConfigs() {
+    var configs = new HashMap<String, Object>();
+    configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+    return configs;
   }
 
   public Map<String, Object> toProducerConfigs() {

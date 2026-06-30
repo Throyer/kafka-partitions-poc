@@ -1,6 +1,5 @@
 package com.example.poc.modules.aftersale.messaging.producers;
 
-import static com.example.poc.shared.messaging.rabbitmq.domain.models.QueueAlias.TRACKING_UPDATE_AFTERSALE;
 import static com.example.poc.shared.messaging.rabbitmq.domain.queues.AfterSaleUpdateQueue.HASH_HEADER;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class AfterSaleUpdateProducer {
     var orderNumber = event.getOrderNumber();
     var headers = Map.of(HASH_HEADER, orderNumber);
     
-    manager.getByAlias(TRACKING_UPDATE_AFTERSALE)
-      .publish(event, headers);
+//    manager.getByAlias(TRACKING_UPDATE_AFTERSALE)
+//      .publish(event, headers);
   }
 }
