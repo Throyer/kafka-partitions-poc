@@ -8,6 +8,7 @@ x-app-base: &app-base
     SPRING_RABBITMQ_HOST: rabbitmq
     DB_URI: mongodb://root:root@database:27017/after_sale
     KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    KAFKA_TOPICS_0_LISTENER_SETTINGS_CONCURRENCY: 3
     CORPORATE_CUSTOMERS_HOST: http://mocks:3001
     CORPORATE_ORDERS_HOST: http://mocks:3001
     CORPORATE_PAYMENTS_HOST: http://mocks:3001
