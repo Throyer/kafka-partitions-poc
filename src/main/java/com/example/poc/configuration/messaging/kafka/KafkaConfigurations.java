@@ -1,8 +1,8 @@
 package com.example.poc.configuration.messaging.kafka;
 
 import static com.example.poc.shared.messaging.kafka.domain.models.TopicAlias.TRACKING_UPDATE_AFTERSALE;
-import static com.example.poc.shared.messaging.kafka.domain.utils.KafkaUtils.createTemplate;
 
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,11 +13,15 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import com.example.poc.modules.aftersale.domain.models.Event;
-import com.example.poc.shared.environments.domain.KafkaProperties;
+import com.example.poc.shared.environments.domain.kafka.KafkaProperties;
 
 @EnableKafka
 @Configuration
 public class KafkaConfigurations {
+  public static final int PARTITION_COUNT = 8;
+  public static final short REPLICATION_FACTOR = 1;
+  public static final String TOPIC_NAME = "after-sale-update";
+  
   @Bean
   KafkaAdmin kafkaAdmin(KafkaProperties properties) {
     return properties.admin();
@@ -50,6 +54,15 @@ public class KafkaConfigurations {
   KafkaTemplate<String, Event> template(
     @Qualifier("kafka-producer-aftersale") ProducerFactory<String, Event> producer
   ) {
-    return createTemplate(producer);
+    return new KafkaTemplate<>(producer);
+  }
+
+  @Bean
+  NewTopic afterSaleUpdateTopic() {
+    return  new NewTopic(
+      TOPIC_NAME,
+      PARTITION_COUNT,
+      REPLICATION_FACTOR
+    );
   }
 }

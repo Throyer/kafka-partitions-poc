@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.kafka.domain.models;
+package com.example.poc.shared.environments.domain.kafka;
 
 import static org.springframework.kafka.listener.ContainerProperties.AckMode.RECORD;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;

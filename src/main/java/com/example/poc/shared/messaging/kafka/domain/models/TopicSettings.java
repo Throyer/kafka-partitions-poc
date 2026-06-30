@@ -1,11 +1,10 @@
-package com.example.poc.shared.messaging.kafka.domain.models.settings;
+package com.example.poc.shared.messaging.kafka.domain.models;
 
 import com.example.poc.shared.common.domain.utils.JSON;
+import com.example.poc.shared.environments.domain.kafka.KafkaListenerSettings;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import com.example.poc.shared.messaging.kafka.domain.models.KafkaListenerSettings;
-import com.example.poc.shared.messaging.kafka.domain.models.TopicAlias;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;

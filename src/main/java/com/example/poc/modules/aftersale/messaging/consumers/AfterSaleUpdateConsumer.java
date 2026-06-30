@@ -1,6 +1,6 @@
 package com.example.poc.modules.aftersale.messaging.consumers;
 
-import static com.example.poc.shared.messaging.kafka.domain.declares.AfterSaleUpdateTopicDeclarator.TOPIC_NAME;
+import static com.example.poc.configuration.messaging.kafka.KafkaConfigurations.TOPIC_NAME;
 import static org.springframework.kafka.support.KafkaHeaders.RECEIVED_KEY;
 import static org.springframework.kafka.support.KafkaHeaders.RECEIVED_PARTITION;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,7 +22,7 @@ public class AfterSaleUpdateConsumer {
     topics = TOPIC_NAME,
     containerFactory = "kafka-container-aftersale"
   )
-  public void listen(
+  public void update(
     @Payload Event event,
     @Header(RECEIVED_KEY) String key,
     @Header(RECEIVED_PARTITION) int partition

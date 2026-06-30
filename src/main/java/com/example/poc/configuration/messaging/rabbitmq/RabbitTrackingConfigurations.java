@@ -12,7 +12,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.example.poc.shared.environments.domain.ConnectionsProperties;
+import com.example.poc.shared.environments.domain.rabbitmq.ConnectionsProperties;
 
 @Configuration
 public class RabbitTrackingConfigurations {

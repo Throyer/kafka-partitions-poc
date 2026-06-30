@@ -19,6 +19,6 @@ public class ProcessExternalEventService {
       external.timestamp()
     );
     
-    producer.publish(event);
+    producer.publish(event, event.getOrderNumber());
   }
 }

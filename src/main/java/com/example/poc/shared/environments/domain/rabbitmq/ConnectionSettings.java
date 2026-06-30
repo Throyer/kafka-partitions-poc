@@ -1,10 +1,11 @@
-package com.example.poc.shared.messaging.rabbitmq.domain.models.connection;
+package com.example.poc.shared.environments.domain.rabbitmq;
 
 import static java.util.Optional.ofNullable;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
+import com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 

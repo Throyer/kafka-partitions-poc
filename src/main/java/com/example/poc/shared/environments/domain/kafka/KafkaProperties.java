@@ -1,4 +1,4 @@
-package com.example.poc.shared.environments.domain;
+package com.example.poc.shared.environments.domain.kafka;
 
 import static java.lang.String.format;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG;
@@ -19,7 +19,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.stereotype.Component;
 import com.example.poc.shared.messaging.kafka.domain.models.TopicAlias;
-import com.example.poc.shared.messaging.kafka.domain.models.settings.TopicSettings;
+import com.example.poc.shared.messaging.kafka.domain.models.TopicSettings;
 import lombok.Getter;
 import lombok.Setter;
 

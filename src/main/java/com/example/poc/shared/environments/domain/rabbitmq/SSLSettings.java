@@ -1,4 +1,4 @@
-package com.example.poc.shared.messaging.rabbitmq.domain.models.connection;
+package com.example.poc.shared.environments.domain.rabbitmq;
 
 import static lombok.AccessLevel.NONE;
 

@@ -1,8 +1,8 @@
 package com.example.poc.shared.messaging.rabbitmq.services;
 
-import com.example.poc.shared.environments.domain.ConnectionsProperties;
+import com.example.poc.shared.environments.domain.rabbitmq.ConnectionsProperties;
 import com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection;
-import com.example.poc.shared.messaging.rabbitmq.domain.models.connection.ConnectionSettings;
+import com.example.poc.shared.environments.domain.rabbitmq.ConnectionSettings;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
