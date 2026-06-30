@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class TopicPublisherManager {
-  private final List<TopicProducer> publishers;
+  private final List<TopicProducer<?>> publishers;
 
-  public TopicProducer getByAlias(TopicAlias alias) {
-    return publishers
+  @SuppressWarnings("unchecked")
+  public <T> TopicProducer<T> getByAlias(TopicAlias alias) {
+    return (TopicProducer<T>) publishers
       .stream()
       .filter(publisher -> publisher.hasAlias(alias))
       .findFirst()
-      .orElseThrow(() -> new RuntimeException(format("não foi possível encontrar topico com alias: %s", alias)));
+      .orElseThrow(() -> new RuntimeException(format("não foi possível encontrar tópico com alias: %s", alias)));
   }
 }

@@ -14,7 +14,7 @@ public abstract class TopicProducer<T> implements TopicPublishSource {
       template.send(topic(), message);
     } catch (Exception exception) {
       log.error(
-        "erro ao publicar mensagem. topico: {} method: {}, error: {}",
+        "erro ao publicar mensagem. tópico: {} method: {}, error: {}",
         alias(),
         "publish",
         exception.getMessage()
@@ -27,7 +27,7 @@ public abstract class TopicProducer<T> implements TopicPublishSource {
       template.send(topic(), key, message);
     } catch (Exception exception) {
       log.error(
-        "erro ao publicar mensagem. topico: {} method: {}, error: {}",
+        "erro ao publicar mensagem. tópico: {} method: {}, error: {}",
         alias(),
         "publish",
         exception.getMessage()
