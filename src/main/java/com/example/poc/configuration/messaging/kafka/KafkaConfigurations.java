@@ -1,0 +1,61 @@
+package com.example.poc.configuration.messaging.kafka;
+
+import static com.example.poc.shared.messaging.kafka.domain.models.TopicAlias.TRACKING_UPDATE_AFTERSALE;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.KafkaAdmin;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
+import com.example.poc.modules.aftersale.domain.models.Event;
+import com.example.poc.shared.environments.domain.kafka.KafkaProperties;
+
+@EnableKafka
+@Configuration
+public class KafkaConfigurations {
+  @Bean
+  KafkaAdmin kafkaAdmin(KafkaProperties properties) {
+    return properties.admin();
+  }
+
+  @Bean("kafka-producer-aftersale")
+  ProducerFactory<String, Event> producer(KafkaProperties properties) {
+    return properties
+      .producer(TRACKING_UPDATE_AFTERSALE);
+  }
+
+  @Bean("kafka-consumer-aftersale")
+  ConsumerFactory<String, Event> consumer(KafkaProperties properties) {
+    return properties
+      .consumer(TRACKING_UPDATE_AFTERSALE, Event.class);
+  }
+
+  @Bean(name = "kafka-container-aftersale")
+  ConcurrentKafkaListenerContainerFactory<String, Event> container(
+    @Qualifier("kafka-consumer-aftersale") ConsumerFactory<String, Event> factory,
+    KafkaProperties properties
+  ) {
+    var topic = properties.requireByAlias(TRACKING_UPDATE_AFTERSALE);
+    return topic
+      .getListenerSettings()
+      .getManualContainerFactory(factory);
+  }
+
+  @Bean(name = "kafka-template-aftersale")
+  KafkaTemplate<String, Event> template(
+    @Qualifier("kafka-producer-aftersale") ProducerFactory<String, Event> producer
+  ) {
+    return new KafkaTemplate<>(producer);
+  }
+
+  @Bean
+  NewTopic topic(KafkaProperties properties) {
+    return properties
+      .requireByAlias(TRACKING_UPDATE_AFTERSALE)
+      .topic();
+  }
+}
