@@ -58,7 +58,7 @@ public class KafkaConfigurations {
   }
 
   @Bean
-  NewTopic afterSaleUpdateTopic() {
+  NewTopic topic() {
     return  new NewTopic(
       TOPIC_NAME,
       PARTITION_COUNT,
