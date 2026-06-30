@@ -8,10 +8,7 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_
 import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.CLIENT_ID_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -19,10 +16,8 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.stereotype.Component;
-import com.example.poc.modules.aftersale.domain.models.Event;
 import com.example.poc.shared.messaging.kafka.domain.models.TopicAlias;
 import com.example.poc.shared.messaging.kafka.domain.models.settings.TopicSettings;
 import lombok.Getter;
@@ -36,48 +31,37 @@ public class KafkaProperties {
   private String bootstrapServers;
   private String clientId;
   private Set<TopicSettings> topics;
-
-  public Optional<TopicSettings> getByAlias(TopicAlias alias) {
+  
+  public TopicSettings requireByAlias(TopicAlias alias) {
     return topics
       .stream()
       .filter(topic -> topic.getName().equals(alias))
-      .findFirst();
+      .findFirst()
+      .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações para %s", alias)));
   }
 
-  public DefaultKafkaProducerFactory<String, Event> toProducerFactory() {
-    return new DefaultKafkaProducerFactory<>(toProducerConfigs());
-  }
-
-  public DefaultKafkaConsumerFactory<String, Event> toConsumerFactory(TopicSettings topic) {
-    return toConsumerFactory(Event.class, topic);
-  }
-
-  public <T> DefaultKafkaConsumerFactory<String, T> toConsumerFactory(Class<T> type, TopicSettings topic) {
-    var deserializer = new JsonDeserializer<>(type);
-    deserializer.addTrustedPackages("*");
-    deserializer.setUseTypeHeaders(false);
-    return new DefaultKafkaConsumerFactory<>(toConsumerConfigs(topic), new StringDeserializer(), deserializer);
-  }
-
-  public Map<String, Object> toAdminConfigs() {
+  public KafkaAdmin admin() {
     var configs = new HashMap<String, Object>();
+
     configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-    return configs;
+
+    return new KafkaAdmin(configs);
   }
 
-  public Map<String, Object> toProducerConfigs() {
+  public <T> DefaultKafkaProducerFactory<String, T> producer(TopicAlias alias) {
     var configs = new HashMap<String, Object>();
     configs.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     configs.put(CLIENT_ID_CONFIG, clientId);
     configs.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-    configs.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-    configs.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
-
-    return configs;
+    
+    return requireByAlias(alias)
+      .producer(configs);
   }
 
-  public Map<String, Object> toConsumerConfigs(TopicSettings topic) {
+  public <T> DefaultKafkaConsumerFactory<String, T> consumer(TopicAlias alias, Class<T> type) {
+    var topic = requireByAlias(alias);
     var configs = new HashMap<String, Object>();
+
     configs.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     configs.put(GROUP_ID_CONFIG, topic.getConsumerGroupId());
     configs.put(CLIENT_ID_CONFIG, clientId);
@@ -85,11 +69,6 @@ public class KafkaProperties {
     configs.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
     configs.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
-    return configs;
-  }
-
-  public TopicSettings requireByAlias(TopicAlias alias) {
-    return getByAlias(alias)
-      .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações para %s", alias)));
+    return topic.consumer(configs, type);
   }
 }

@@ -20,18 +20,19 @@ import com.example.poc.shared.environments.domain.KafkaProperties;
 public class KafkaConfigurations {
   @Bean
   KafkaAdmin kafkaAdmin(KafkaProperties properties) {
-    return new KafkaAdmin(properties.toAdminConfigs());
+    return properties.admin();
   }
 
   @Bean("kafka-producer-aftersale")
   ProducerFactory<String, Event> producer(KafkaProperties properties) {
-    return properties.toProducerFactory();
+    return properties
+      .producer(TRACKING_UPDATE_AFTERSALE);
   }
 
   @Bean("kafka-consumer-aftersale")
   ConsumerFactory<String, Event> consumer(KafkaProperties properties) {
-    var topic = properties.requireByAlias(TRACKING_UPDATE_AFTERSALE);
-    return properties.toConsumerFactory(topic);
+    return properties
+      .consumer(TRACKING_UPDATE_AFTERSALE, Event.class);
   }
 
   @Bean(name = "kafka-container-aftersale")
@@ -40,7 +41,9 @@ public class KafkaConfigurations {
     KafkaProperties properties
   ) {
     var topic = properties.requireByAlias(TRACKING_UPDATE_AFTERSALE);
-    return topic.getListenerSettings().getManualContainerFactory(factory);
+    return topic
+      .getListenerSettings()
+      .getManualContainerFactory(factory);
   }
 
   @Bean(name = "kafka-template-aftersale")
