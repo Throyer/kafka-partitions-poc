@@ -6,10 +6,10 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 @Slf4j
 @AllArgsConstructor
-public abstract class TopicProducer implements TopicPublishSource {
-  private final KafkaTemplate<String, Object> template;
+public abstract class TopicProducer<T> implements TopicPublishSource {
+  private final KafkaTemplate<String, T> template;
 
-  public <T> void publish(T message) {
+  public void publish(T message) {
     try {
       template.send(topic(), message);
     } catch (Exception exception) {
@@ -22,7 +22,7 @@ public abstract class TopicProducer implements TopicPublishSource {
     }
   }
 
-  public <T> void publish(T message, String key) {
+  public void publish(T message, String key) {
     try {
       template.send(topic(), key, message);
     } catch (Exception exception) {
