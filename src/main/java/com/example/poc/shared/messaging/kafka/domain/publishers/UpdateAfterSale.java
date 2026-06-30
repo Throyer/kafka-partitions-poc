@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UpdateAfterSale extends TopicProducer {
   public UpdateAfterSale(
-    @Qualifier("kafka-template") KafkaTemplate<String, Object> template
+    @Qualifier("kafka-template-aftersale") KafkaTemplate<String, Object> template
   ) {
     super(template);
   }

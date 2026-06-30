@@ -6,7 +6,7 @@ import org.springframework.kafka.core.ProducerFactory;
 public class KafkaUtils {
   private KafkaUtils() { }
 
-  public static KafkaTemplate<String, Object> createTemplate(ProducerFactory<String, Object> factory) {
+  public static <T> KafkaTemplate<String, T> createTemplate(ProducerFactory<String, T> factory) {
     return new KafkaTemplate<>(factory);
   }
 }

@@ -21,27 +21,27 @@ public class KafkaConfigurations {
     return new KafkaAdmin(properties.toAdminConfigs());
   }
 
-  @Bean("kafka-producer")
+  @Bean("kafka-producer-aftersale")
   ProducerFactory<String, Event> producer(KafkaProperties properties) {
     return properties.toProducerFactory();
   }
 
-  @Bean("kafka-consumer")
+  @Bean("kafka-consumer-aftersale")
   ConsumerFactory<String, Event> consumer(KafkaProperties properties) {
     return properties.toConsumerFactory(Event.class);
   }
 
-  @Bean(name = "kafka-container")
+  @Bean(name = "kafka-container-aftersale")
   ConcurrentKafkaListenerContainerFactory<String, Event> container(
-    @Qualifier("kafka-consumer") ConsumerFactory<String, Event> factory,
+    @Qualifier("kafka-consumer-aftersale") ConsumerFactory<String, Event> factory,
     KafkaProperties properties
   ) {
     return properties.getListenerSettings().getManualContainerFactory(factory);
   }
 
-  @Bean(name = "kafka-template")
-  KafkaTemplate<String, Object> template(
-    @Qualifier("kafka-producer") ProducerFactory<String, Object> producer
+  @Bean(name = "kafka-template-aftersale")
+  KafkaTemplate<String, Event> template(
+    @Qualifier("kafka-producer-aftersale") ProducerFactory<String, Event> producer
   ) {
     return createTemplate(producer);
   }
