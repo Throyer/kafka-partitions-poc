@@ -1,6 +1,6 @@
-package com.example.poc.configuration.messaging;
+package com.example.poc.configuration.messaging.rabbitmq;
 
-import static com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection.TMS;
+import static com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection.TRACKING;
 import static com.example.poc.shared.messaging.rabbitmq.domain.utils.RabbitUtils.createTemplate;
 import static java.lang.String.format;
 import java.security.KeyManagementException;
@@ -14,34 +14,33 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.example.poc.shared.environments.domain.ConnectionsProperties;
 
-
 @Configuration
-public class RabbitTmsConfigurations {
-  @Bean("tms-connection")
+public class RabbitTrackingConfigurations {
+  @Bean("tracking-connection")
   CachingConnectionFactory connection(
     ConnectionsProperties properties
   ) throws NoSuchAlgorithmException, KeyManagementException {
-    var connection = properties.getByConnection(TMS)
-      .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações para %s", TMS)));
+    var connection = properties.getByConnection(TRACKING)
+      .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações para %s", TRACKING)));
     
     return connection.toFactory();
   }
 
-  @Bean(name = "tms-container")
+  @Bean(name = "tracking-container")
   SimpleRabbitListenerContainerFactory container(
-    @Qualifier("tms-connection") ConnectionFactory factory,
+    @Qualifier("tracking-connection") ConnectionFactory factory,
     ConnectionsProperties properties
   ) {
-    var connection = properties.getByConnection(TMS)
-      .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações para %s", TMS)));
+    var connection = properties.getByConnection(TRACKING)
+      .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações para %s", TRACKING)));
     
     var settings = connection.getListenerSettings();
     return settings.getManualContainerFactory(factory);
   }
 
-  @Bean(name = "tms-template")
+  @Bean(name = "tracking-template")
   RabbitTemplate rabbitMQTemplate(
-    @Qualifier("tms-connection") ConnectionFactory connection
+    @Qualifier("tracking-connection") ConnectionFactory connection
   ) {
     return createTemplate(connection);
   }

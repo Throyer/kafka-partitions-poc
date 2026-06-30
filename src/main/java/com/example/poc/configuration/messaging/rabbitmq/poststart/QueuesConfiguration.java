@@ -1,4 +1,4 @@
-package com.example.poc.configuration.messaging.poststart;
+package com.example.poc.configuration.messaging.rabbitmq.poststart;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;

@@ -1,4 +1,4 @@
-package com.example.poc.configuration.messaging;
+package com.example.poc.configuration.messaging.rabbitmq;
 
 import com.example.poc.shared.environments.domain.ConnectionsProperties;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
