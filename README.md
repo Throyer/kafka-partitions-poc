@@ -1,6 +1,5 @@
-# POC Aftersale + RabbitMQ
-
-POC para processamento de pedidos pós-venda com RabbitMQ, MongoDB e integrações corporativas mockadas.
+# POC processamento de alto volume de status de pos-vendas sem concorrência
+POC para processamento de pedidos pós-venda com Kafka e RabbitMQ, MongoDB e integrações corporativas mockadas.
 
 ## Pré-requisitos
 
