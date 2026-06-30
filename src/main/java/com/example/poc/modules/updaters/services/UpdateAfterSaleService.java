@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 public class UpdateAfterSaleService {
   private final AfterSaleService afterSaleService;
   private final CreateAfterSaleCompleteService createAfterSaleService;
-  private final CreateReceivedEventService createReceivedEventService;
+  private final CreateReceivedEventService events;
   private final UpdatersManager manager;
 
   public void update(Event event) {
@@ -26,6 +26,6 @@ public class UpdateAfterSaleService {
     }
 
     manager.update(event);
-    createReceivedEventService.create(event);
+    events.create(event);
   }
 }
