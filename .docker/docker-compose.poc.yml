@@ -7,6 +7,7 @@ x-app-base: &app-base
   environment:
     SPRING_RABBITMQ_HOST: rabbitmq
     DB_URI: mongodb://root:root@database:27017/after_sale
+    KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     CORPORATE_CUSTOMERS_HOST: http://mocks:3001
     CORPORATE_ORDERS_HOST: http://mocks:3001
     CORPORATE_PAYMENTS_HOST: http://mocks:3001
@@ -14,6 +15,8 @@ x-app-base: &app-base
   depends_on:
     rabbitmq:
       condition: service_healthy
+    kafka:
+      condition: service_started
   deploy:
     resources:
       limits:
