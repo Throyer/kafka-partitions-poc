@@ -5,7 +5,7 @@ import com.example.poc.modules.aftersale.domain.models.Event;
 import com.example.poc.modules.aftersale.services.AfterSaleService;
 import com.example.poc.modules.aftersale.services.CreateAfterSaleCompleteService;
 import com.example.poc.modules.timeline.services.CreateReceivedEventService;
-import com.example.poc.shared.messaging.domain.models.message.Message;
+import com.example.poc.shared.messaging.rabbitmq.domain.models.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

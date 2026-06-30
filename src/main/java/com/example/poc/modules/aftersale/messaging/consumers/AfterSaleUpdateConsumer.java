@@ -1,13 +1,13 @@
 package com.example.poc.modules.aftersale.messaging.consumers;
 
-import static com.example.poc.shared.messaging.domain.models.QueueAlias.TRACKING_UPDATE_AFTERSALE;
-import static com.example.poc.shared.messaging.domain.models.connection.Connection.TRACKING;
+import static com.example.poc.shared.messaging.rabbitmq.domain.models.QueueAlias.TRACKING_UPDATE_AFTERSALE;
+import static com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection.TRACKING;
 import org.springframework.stereotype.Component;
 import com.example.poc.modules.aftersale.domain.models.Event;
 import com.example.poc.modules.updaters.services.UpdateAfterSaleService;
-import com.example.poc.shared.messaging.domain.annotations.RabbitConnection;
-import com.example.poc.shared.messaging.domain.models.message.Message;
-import com.example.poc.shared.messaging.domain.models.message.RetryListener;
+import com.example.poc.shared.messaging.rabbitmq.domain.annotations.RabbitConnection;
+import com.example.poc.shared.messaging.rabbitmq.domain.models.message.Message;
+import com.example.poc.shared.messaging.rabbitmq.domain.models.message.RetryListener;
 import lombok.AllArgsConstructor;
 
 @Component

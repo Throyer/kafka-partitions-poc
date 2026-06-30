@@ -1,7 +1,7 @@
 package com.example.poc.shared.environments.domain;
 
-import com.example.poc.shared.messaging.domain.models.connection.Connection;
-import com.example.poc.shared.messaging.domain.models.connection.ConnectionSettings;
+import com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection;
+import com.example.poc.shared.messaging.rabbitmq.domain.models.connection.ConnectionSettings;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -3,7 +3,7 @@ package com.example.poc.configuration.messaging.poststart;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import com.example.poc.shared.messaging.services.DeclareQueuesManager;
+import com.example.poc.shared.messaging.rabbitmq.services.DeclareQueuesManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

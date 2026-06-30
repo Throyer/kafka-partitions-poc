@@ -1,7 +1,7 @@
 package com.example.poc.configuration.messaging;
 
-import static com.example.poc.shared.messaging.domain.models.connection.Connection.TMS;
-import static com.example.poc.shared.messaging.domain.utils.RabbitUtils.createTemplate;
+import static com.example.poc.shared.messaging.rabbitmq.domain.models.connection.Connection.TMS;
+import static com.example.poc.shared.messaging.rabbitmq.domain.utils.RabbitUtils.createTemplate;
 import static java.lang.String.format;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;

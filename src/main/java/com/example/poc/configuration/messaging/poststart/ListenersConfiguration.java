@@ -3,7 +3,7 @@ package com.example.poc.configuration.messaging.poststart;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import com.example.poc.shared.messaging.services.ListenerManager;
+import com.example.poc.shared.messaging.rabbitmq.services.QueueListenerManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @AllArgsConstructor
 public class ListenersConfiguration implements CommandLineRunner {
-  private final ListenerManager manager;
+  private final QueueListenerManager manager;
 
   @Override
   public void run(String... args) throws Exception {
