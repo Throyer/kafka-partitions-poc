@@ -1,7 +1,6 @@
 package com.example.poc.configuration.messaging.kafka;
 
 import static com.example.poc.shared.messaging.kafka.domain.models.TopicAlias.TRACKING_UPDATE_AFTERSALE;
-
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +17,6 @@ import com.example.poc.shared.environments.domain.kafka.KafkaProperties;
 @EnableKafka
 @Configuration
 public class KafkaConfigurations {
-  public static final int PARTITION_COUNT = 8;
-  public static final short REPLICATION_FACTOR = 1;
-  public static final String TOPIC_NAME = "after-sale-update";
-  
   @Bean
   KafkaAdmin kafkaAdmin(KafkaProperties properties) {
     return properties.admin();
@@ -58,11 +53,9 @@ public class KafkaConfigurations {
   }
 
   @Bean
-  NewTopic topic() {
-    return  new NewTopic(
-      TOPIC_NAME,
-      PARTITION_COUNT,
-      REPLICATION_FACTOR
-    );
+  NewTopic topic(KafkaProperties properties) {
+    return properties
+      .requireByAlias(TRACKING_UPDATE_AFTERSALE)
+      .topic();
   }
 }
