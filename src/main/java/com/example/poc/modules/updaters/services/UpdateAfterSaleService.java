@@ -5,11 +5,8 @@ import com.example.poc.modules.aftersale.domain.models.Event;
 import com.example.poc.modules.aftersale.services.AfterSaleService;
 import com.example.poc.modules.aftersale.services.CreateAfterSaleCompleteService;
 import com.example.poc.modules.timeline.services.CreateReceivedEventService;
-import com.example.poc.shared.messaging.rabbitmq.domain.models.message.Message;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @AllArgsConstructor
 public class UpdateAfterSaleService {
@@ -18,26 +15,17 @@ public class UpdateAfterSaleService {
   private final CreateReceivedEventService createReceivedEventService;
   private final UpdatersManager manager;
 
-  public void update(Message<Event> message) {
-    var queue = message.consumerQueue();
-    var event = message.getBody();
+  public void update(Event event) {
     var orderNumber = event.getOrderNumber();
 
-    log.info(
-      "event received. queue: {}, orderNumber: {}, code: {}",
-      queue,
-      orderNumber,
-      event.getStatusCode()
-    );
-    
     if (!event.is("1011")) {
       if (!afterSaleService.exists(orderNumber)) {
         createAfterSaleService.create(orderNumber);
-        return;        
+        return;
       }
     }
 
-    manager.update(event);    
+    manager.update(event);
     createReceivedEventService.create(event);
   }
 }

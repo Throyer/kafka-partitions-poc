@@ -4,7 +4,6 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET
 import static org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
-import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.CLIENT_ID_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
@@ -21,6 +20,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.stereotype.Component;
+import com.example.poc.modules.aftersale.domain.models.Event;
 import com.example.poc.shared.messaging.kafka.domain.models.KafkaListenerSettings;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,12 +37,19 @@ public class KafkaProperties {
   @NestedConfigurationProperty
   private KafkaListenerSettings listenerSettings;
 
-  public DefaultKafkaProducerFactory<String, Object> toProducerFactory() {
+  public DefaultKafkaProducerFactory<String, Event> toProducerFactory() {
     return new DefaultKafkaProducerFactory<>(toProducerConfigs());
   }
 
-  public DefaultKafkaConsumerFactory<String, Object> toConsumerFactory() {
-    return new DefaultKafkaConsumerFactory<>(toConsumerConfigs());
+  public DefaultKafkaConsumerFactory<String, Event> toConsumerFactory() {
+    return toConsumerFactory(Event.class);
+  }
+
+  public <T> DefaultKafkaConsumerFactory<String, T> toConsumerFactory(Class<T> type) {
+    var deserializer = new JsonDeserializer<>(type);
+    deserializer.addTrustedPackages("*");
+    deserializer.setUseTypeHeaders(false);
+    return new DefaultKafkaConsumerFactory<>(toConsumerConfigs(), new StringDeserializer(), deserializer);
   }
 
   public Map<String, Object> toAdminConfigs() {
@@ -70,10 +77,6 @@ public class KafkaProperties {
     configs.put(ENABLE_AUTO_COMMIT_CONFIG, false);
     configs.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
     configs.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-    configs.put(VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-    configs.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-    configs.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Object.class.getName());
-    configs.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
 
     return configs;
   }
