@@ -1,5 +1,6 @@
 package com.example.poc.shared.environments.domain;
 
+import static java.lang.String.format;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
@@ -10,18 +11,20 @@ import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CL
 import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.stereotype.Component;
 import com.example.poc.modules.aftersale.domain.models.Event;
-import com.example.poc.shared.messaging.kafka.domain.models.KafkaListenerSettings;
+import com.example.poc.shared.messaging.kafka.domain.models.TopicAlias;
+import com.example.poc.shared.messaging.kafka.domain.models.settings.TopicSettings;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,24 +35,28 @@ import lombok.Setter;
 public class KafkaProperties {
   private String bootstrapServers;
   private String clientId;
-  private String consumerGroupId;
+  private Set<TopicSettings> topics;
 
-  @NestedConfigurationProperty
-  private KafkaListenerSettings listenerSettings;
+  public Optional<TopicSettings> getByAlias(TopicAlias alias) {
+    return topics
+      .stream()
+      .filter(topic -> topic.getName().equals(alias))
+      .findFirst();
+  }
 
   public DefaultKafkaProducerFactory<String, Event> toProducerFactory() {
     return new DefaultKafkaProducerFactory<>(toProducerConfigs());
   }
 
-  public DefaultKafkaConsumerFactory<String, Event> toConsumerFactory() {
-    return toConsumerFactory(Event.class);
+  public DefaultKafkaConsumerFactory<String, Event> toConsumerFactory(TopicSettings topic) {
+    return toConsumerFactory(Event.class, topic);
   }
 
-  public <T> DefaultKafkaConsumerFactory<String, T> toConsumerFactory(Class<T> type) {
+  public <T> DefaultKafkaConsumerFactory<String, T> toConsumerFactory(Class<T> type, TopicSettings topic) {
     var deserializer = new JsonDeserializer<>(type);
     deserializer.addTrustedPackages("*");
     deserializer.setUseTypeHeaders(false);
-    return new DefaultKafkaConsumerFactory<>(toConsumerConfigs(), new StringDeserializer(), deserializer);
+    return new DefaultKafkaConsumerFactory<>(toConsumerConfigs(topic), new StringDeserializer(), deserializer);
   }
 
   public Map<String, Object> toAdminConfigs() {
@@ -69,15 +76,20 @@ public class KafkaProperties {
     return configs;
   }
 
-  public Map<String, Object> toConsumerConfigs() {
+  public Map<String, Object> toConsumerConfigs(TopicSettings topic) {
     var configs = new HashMap<String, Object>();
     configs.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-    configs.put(GROUP_ID_CONFIG, consumerGroupId);
+    configs.put(GROUP_ID_CONFIG, topic.getConsumerGroupId());
     configs.put(CLIENT_ID_CONFIG, clientId);
     configs.put(ENABLE_AUTO_COMMIT_CONFIG, false);
     configs.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
     configs.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
     return configs;
+  }
+
+  public TopicSettings requireByAlias(TopicAlias alias) {
+    return getByAlias(alias)
+      .orElseThrow(() -> new RuntimeException(format("não foi possível localizar as configurações para %s", alias)));
   }
 }

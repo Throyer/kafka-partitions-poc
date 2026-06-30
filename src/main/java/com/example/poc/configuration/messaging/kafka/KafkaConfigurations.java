@@ -1,6 +1,8 @@
 package com.example.poc.configuration.messaging.kafka;
 
+import static com.example.poc.shared.messaging.kafka.domain.models.TopicAlias.TRACKING_UPDATE_AFTERSALE;
 import static com.example.poc.shared.messaging.kafka.domain.utils.KafkaUtils.createTemplate;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +30,8 @@ public class KafkaConfigurations {
 
   @Bean("kafka-consumer-aftersale")
   ConsumerFactory<String, Event> consumer(KafkaProperties properties) {
-    return properties.toConsumerFactory(Event.class);
+    var topic = properties.requireByAlias(TRACKING_UPDATE_AFTERSALE);
+    return properties.toConsumerFactory(topic);
   }
 
   @Bean(name = "kafka-container-aftersale")
@@ -36,7 +39,8 @@ public class KafkaConfigurations {
     @Qualifier("kafka-consumer-aftersale") ConsumerFactory<String, Event> factory,
     KafkaProperties properties
   ) {
-    return properties.getListenerSettings().getManualContainerFactory(factory);
+    var topic = properties.requireByAlias(TRACKING_UPDATE_AFTERSALE);
+    return topic.getListenerSettings().getManualContainerFactory(factory);
   }
 
   @Bean(name = "kafka-template-aftersale")
